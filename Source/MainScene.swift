@@ -44,6 +44,10 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     var activeObstacleIndex:Int = 0;
     // specifies total obstacles.
     var totalObstacles:Int!;
+    // specifies last obstacle index; its position will be checked in order to set the time to add a new obstacle to MainScene.
+    var lastObstacleIndex:Int = 0;
+    // gets minimum possible obstacle position to be officially considered outside scene bounds.
+    var minimumObstaclePositionX:CGFloat!;
     
     /* cocos2d methods */
     
@@ -62,11 +66,12 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         }
         
         self.totalObstacles = self.obstacles.count;
+        self.minimumObstaclePositionX = -self.obstacles[0].contentSize.width;
         
         for i in 0..<3 {
             self.spawnNewObstacle();
         }
-        
+        self.gamePhysicsNode.collisionDelegate = self;
         self.userInteractionEnabled = true;
     }
     
@@ -103,6 +108,13 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             println("HI");
             currentGround.position = ccp(-(self.minimumGroundPositionX * 2), currentGround.position.y);
             self.groundBlockIndex = (self.groundBlockIndex + 1) % 2;
+        }
+        
+        let lastObstacle = self.obstacles[self.lastObstacleIndex];
+        if (convertToNodeSpace(self.gamePhysicsNode.convertToWorldSpace(lastObstacle.position)).x <= self.minimumObstaclePositionX) {
+            println("HELLO");
+            self.spawnNewObstacle();
+            self.lastObstacleIndex = (self.lastObstacleIndex + 1) % self.totalObstacles;
         }
     }
     
