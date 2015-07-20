@@ -10,7 +10,7 @@
 		<false/>
 	</dict>
 	<key>UUID</key>
-	<integer>16</integer>
+	<integer>17</integer>
 	<key>centeredOrigin</key>
 	<false/>
 	<key>currentResolution</key>
@@ -374,7 +374,7 @@
 			</dict>
 			<dict>
 				<key>UUID</key>
-				<integer>15</integer>
+				<integer>16</integer>
 				<key>baseClass</key>
 				<string>CCBFile</string>
 				<key>children</key>
@@ -382,9 +382,9 @@
 				<key>customClass</key>
 				<string></string>
 				<key>displayName</key>
-				<string>CCBFile</string>
+				<string>Bird</string>
 				<key>memberVarAssignmentName</key>
-				<string></string>
+				<string>bird</string>
 				<key>memberVarAssignmentType</key>
 				<integer>1</integer>
 				<key>properties</key>
@@ -404,8 +404,8 @@
 						<string>Position</string>
 						<key>value</key>
 						<array>
-							<real>124</real>
-							<real>289</real>
+							<real>122</real>
+							<real>344</real>
 							<integer>0</integer>
 							<integer>0</integer>
 							<integer>0</integer>
@@ -433,6 +433,8 @@
 						<string>Bird.ccb</string>
 					</dict>
 				</array>
+				<key>selected</key>
+				<true/>
 			</dict>
 		</array>
 		<key>customClass</key>
@@ -572,9 +574,9 @@
 			<key>name</key>
 			<string>Default Timeline</string>
 			<key>offset</key>
-			<real>0.0</real>
+			<real>0.11302089691162109</real>
 			<key>position</key>
-			<real>1.5666667222976685</real>
+			<real>3.4333333969116211</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
