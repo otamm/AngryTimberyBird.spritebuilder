@@ -29,6 +29,18 @@ class MainScene: CCNode {
     var minimumGroundPositionX:CGFloat!;
     // stores the index value in the groundBlocks array of the current ground block being checked for being offscreen.
     var groundBlockIndex:Int = 0;
+    // array to hold current Obstacle instances.
+    var obstacles:[Obstacle] = [];
+    // specifies location of first obstacle.
+    let firstObstaclePosition:CGFloat = 280;
+    // specifies distance between each obstacle.
+    let distanceBetweenObstacles:CGFloat = 160;
+    // specifies horizontal position of past obstacle.
+    var nextObstaclePosition:CGFloat!;
+    // specifies index of active obstacle.
+    var activeObstacleIndex:Int = 0;
+    // specifies total obstacles.
+    var totalObstacles:Int!;
     
     /* cocos2d methods */
     
@@ -37,6 +49,21 @@ class MainScene: CCNode {
         self.groundBlocks.append(self.ground1);
         self.groundBlocks.append(self.ground2);
         self.minimumGroundPositionX = -self.ground1.contentSize.width;
+        
+        self.nextObstaclePosition = self.firstObstaclePosition;
+        var obstacle:Obstacle;
+        for i in 0..<3 {
+            obstacle = CCBReader.load("Obstacle") as! Obstacle;
+            self.obstacles.append(obstacle);
+            self.gamePhysicsNode.addChild(obstacle);
+        }
+        
+        self.totalObstacles = self.obstacles.count;
+        
+        for i in 0..<3 {
+            self.spawnNewObstacle();
+        }
+        
         self.userInteractionEnabled = true;
     }
     
@@ -85,5 +112,14 @@ class MainScene: CCNode {
         self.bird.physicsBody.applyAngularImpulse(10000);
         // resets timer
         self.sinceTouch = 0;
+    }
+    
+    /* custom methods */
+    
+    // creates and adds a new obstacle
+    func spawnNewObstacle() {
+        self.obstacles[self.activeObstacleIndex].position = ccp(self.nextObstaclePosition, 0);
+        self.nextObstaclePosition = self.nextObstaclePosition + self.distanceBetweenObstacles;
+        self.activeObstacleIndex = (self.activeObstacleIndex + 1) % self.totalObstacles;
     }
 }

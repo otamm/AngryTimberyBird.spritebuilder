@@ -72,7 +72,7 @@
 						<key>value</key>
 						<array>
 							<real>38.5</real>
-							<real>0.25</real>
+							<real>0.32499998807907104</real>
 							<integer>0</integer>
 							<integer>0</integer>
 							<integer>2</integer>
@@ -180,7 +180,7 @@
 						<key>value</key>
 						<array>
 							<real>38.5</real>
-							<real>0.25</real>
+							<real>0.32499998807907104</real>
 							<integer>1</integer>
 							<integer>0</integer>
 							<integer>2</integer>
@@ -265,7 +265,7 @@
 				<key>customClass</key>
 				<string></string>
 				<key>displayName</key>
-				<string>CCNode</string>
+				<string>goal</string>
 				<key>memberVarAssignmentName</key>
 				<string></string>
 				<key>memberVarAssignmentType</key>
@@ -288,7 +288,7 @@
 						<key>value</key>
 						<array>
 							<real>1</real>
-							<real>0.25</real>
+							<real>0.32499998807907104</real>
 							<integer>0</integer>
 							<integer>2</integer>
 							<integer>2</integer>
@@ -302,7 +302,7 @@
 						<key>value</key>
 						<array>
 							<real>0.0099999997764825821</real>
-							<real>0.5</real>
+							<real>0.34999999403953552</real>
 							<integer>2</integer>
 							<integer>2</integer>
 						</array>
@@ -337,7 +337,7 @@
 			</dict>
 		</array>
 		<key>customClass</key>
-		<string></string>
+		<string>Obstacle</string>
 		<key>displayName</key>
 		<string>CCNode</string>
 		<key>memberVarAssignmentName</key>
@@ -376,7 +376,7 @@
 				<key>value</key>
 				<array>
 					<real>77</real>
-					<real>400</real>
+					<real>560</real>
 					<integer>0</integer>
 					<integer>0</integer>
 				</array>
@@ -389,7 +389,7 @@
 				<key>value</key>
 				<array>
 					<real>0.0</real>
-					<real>0.5</real>
+					<real>0.0</real>
 				</array>
 			</dict>
 			<dict>
