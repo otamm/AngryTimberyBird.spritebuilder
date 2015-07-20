@@ -433,8 +433,6 @@
 						<string>Bird.ccb</string>
 					</dict>
 				</array>
-				<key>selected</key>
-				<true/>
 			</dict>
 		</array>
 		<key>customClass</key>
@@ -574,9 +572,9 @@
 			<key>name</key>
 			<string>Default Timeline</string>
 			<key>offset</key>
-			<real>0.11302089691162109</real>
+			<real>5.3130207061767578</real>
 			<key>position</key>
-			<real>3.4333333969116211</real>
+			<real>8.6333332061767578</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>

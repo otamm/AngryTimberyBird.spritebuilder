@@ -96,7 +96,7 @@
 						<array>
 							<dict>
 								<key>baseValue</key>
-								<integer>0</integer>
+								<false/>
 								<key>name</key>
 								<string>visible</string>
 								<key>type</key>
@@ -119,8 +119,8 @@
 								<string>Position</string>
 								<key>value</key>
 								<array>
-									<real>52</real>
-									<real>64</real>
+									<real>43</real>
+									<real>48</real>
 									<integer>0</integer>
 									<integer>0</integer>
 									<integer>0</integer>
@@ -194,6 +194,8 @@
 								<array/>
 							</dict>
 						</array>
+						<key>selected</key>
+						<true/>
 						<key>seqExpanded</key>
 						<true/>
 					</dict>
@@ -312,8 +314,6 @@
 								<array/>
 							</dict>
 						</array>
-						<key>selected</key>
-						<true/>
 					</dict>
 					<dict>
 						<key>UUID</key>
@@ -388,7 +388,7 @@
 								<string>Position</string>
 								<key>value</key>
 								<array>
-									<real>33</real>
+									<real>43</real>
 									<real>48</real>
 									<integer>0</integer>
 									<integer>0</integer>
@@ -760,7 +760,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.033333335071802139</real>
+			<real>0.13333334028720856</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
