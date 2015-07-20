@@ -15,6 +15,9 @@ class MainScene: CCNode {
     // the main physics node, every child of it are affected by physics.
     weak var gamePhysicsNode:CCPhysicsNode!;
     
+    // layer inside gamePhysicsNode to add obstacles to.
+    weak var obstaclesLayer:CCNode!;
+    
     /* custom variables */
     
     // will keep track of how much time has passed since last touch. Initialized to 0.
@@ -32,9 +35,9 @@ class MainScene: CCNode {
     // array to hold current Obstacle instances.
     var obstacles:[Obstacle] = [];
     // specifies location of first obstacle.
-    let firstObstaclePosition:CGFloat = 280;
+    let firstObstaclePosition:CGFloat = 380;
     // specifies distance between each obstacle.
-    let distanceBetweenObstacles:CGFloat = 160;
+    let distanceBetweenObstacles:CGFloat = 280;
     // specifies horizontal position of past obstacle.
     var nextObstaclePosition:CGFloat!;
     // specifies index of active obstacle.
@@ -55,7 +58,7 @@ class MainScene: CCNode {
         for i in 0..<3 {
             obstacle = CCBReader.load("Obstacle") as! Obstacle;
             self.obstacles.append(obstacle);
-            self.gamePhysicsNode.addChild(obstacle);
+            self.obstaclesLayer.addChild(obstacle);
         }
         
         self.totalObstacles = self.obstacles.count;
