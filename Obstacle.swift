@@ -22,6 +22,13 @@ class Obstacle:CCNode {
     
     let upperPipeMaximumPositionY:CGFloat = 184;
     
+    /* cocos2d methods */
+    func didLoadFromCCB() {
+        // enables collision detection.
+        self.upperPipe.physicsBody.sensor = true
+        self.bottomPipe.physicsBody.sensor = true
+    }
+    
     /* custom methods */
     
     func setupRandomPosition() {

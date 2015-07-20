@@ -1,6 +1,6 @@
 import Foundation;
 
-class MainScene: CCNode {
+class MainScene: CCNode, CCPhysicsCollisionDelegate {
     /* linked objects */
     
     // the bird sprite
