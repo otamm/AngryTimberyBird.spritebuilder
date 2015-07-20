@@ -4,19 +4,17 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     /* linked objects */
     
     // the bird sprite
-    weak var bird:CCSprite!;
-    
+    weak var bird:Bird!;
     // first ground; first and second grounds will be rendered one after another to give the impression of movement.
     weak var ground1:CCSprite!;
-    
     // second ground block.
     weak var ground2:CCSprite!;
-    
     // the main physics node, every child of it are affected by physics.
     weak var gamePhysicsNode:CCPhysicsNode!;
-    
     // layer inside gamePhysicsNode to add obstacles to.
     weak var obstaclesLayer:CCNode!;
+    // restart button visible once game over is triggered.
+    weak var restartButton:CCButton!;
     
     /* custom variables */
     
@@ -24,7 +22,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     var sinceTouch:CCTime = 0;
     
     // constant speed of horizontal movement.
-    let birdSpeedX:CGFloat = 80;
+    var birdSpeedX:CGFloat = 80;
     
     // array to hold the two ground blocks.
     var groundBlocks:[CCSprite] = [];
@@ -48,6 +46,8 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     var lastObstacleIndex:Int = 0;
     // gets minimum possible obstacle position to be officially considered outside scene bounds.
     var minimumObstaclePositionX:CGFloat!;
+    // keeps track of current score.
+    var score:Int = 0;
     
     /* cocos2d methods */
     
@@ -79,7 +79,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     override func update(delta: CCTime) {
         // clampf tests the specific float value and if it is bigger than a set maximum, the value gets assigned to that maximum (which is 200 in this case). First argument is value to test, second argument is minimum value allowed and third argument is the maximum value allowed.
         // setting the second argument (the minimum) to -Float(CGFloat.max) would assign minimum value as the smallest float possible, which means that the downwards velocity will not get affected.
-        let velocityY = clampf(Float(self.bird.physicsBody.velocity.y), -200, 200);
+        let velocityY = clampf(Float(self.bird.physicsBody.velocity.y), -200, 300);
         self.bird.physicsBody.velocity = ccp(0, CGFloat(velocityY));
         
         // moves bird horizontally on screen.
@@ -90,7 +90,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         self.gamePhysicsNode.position.x -= self.birdSpeedX * CGFloat(delta);
         
         self.sinceTouch += delta; // updates timer
-        self.bird.rotation = clampf(self.bird.rotation, -30, 90); // updates rotation, value is clamped to not let bird spin around itself.
+        /*self.bird.rotation = clampf(self.bird.rotation, -30, 90); // updates rotation, value is clamped to not let bird spin around itself.
         
         // will update bird's angular velocity if the value is not at a minimum or maximum.
         if (self.bird.physicsBody.allowsRotation) {
@@ -101,7 +101,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         if (self.sinceTouch > 0.3) {
             let impulse = -18000.0 * delta;
             self.bird.physicsBody.applyAngularImpulse(CGFloat(impulse));
-        }
+        }*/
         // checks if ground block has gone totally offscreen. if that's the case, repositions it at the end of the next ground block.
         let currentGround = self.groundBlocks[self.groundBlockIndex];
         if (convertToNodeSpace(self.gamePhysicsNode.convertToWorldSpace(currentGround.position)).x <= self.minimumGroundPositionX) {
@@ -118,13 +118,34 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         }
     }
     
+    // listens for collision between bird and any 'level' object.
+    func ccPhysicsCollisionBegin(pair: CCPhysicsCollisionPair!, bird: CCNode!, level: CCNode!) -> Bool {
+        self.triggerGameOver();
+        return true
+    }
+    
+    // listens for collisions between bird and goal, located between two pipes.
+    func ccPhysicsCollisionBegin(pair: CCPhysicsCollisionPair!, bird: CCNode!, goal: CCNode!) -> Bool {
+        self.score++;
+        println("\(self.score)");
+        //scoreLabel.string = String(points)
+        return true
+    }
+    
+    /* button methods */
+    
+    func restart() {
+        let scene = CCBReader.loadAsScene("MainScene");
+        CCDirector.sharedDirector().presentScene(scene);
+    }
+    
     /* iOS methods */
     
     override func touchBegan(touch: CCTouch!, withEvent event: CCTouchEvent!) {
         // makes bird go up
         self.bird.physicsBody.applyImpulse(ccp(0, 300));
         // makes bird rotate up
-        self.bird.physicsBody.applyAngularImpulse(10000);
+        //self.bird.physicsBody.applyAngularImpulse(10000);
         // resets timer
         self.sinceTouch = 0;
     }
@@ -137,5 +158,23 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         self.obstacles[self.activeObstacleIndex].setupRandomPosition();
         self.nextObstaclePosition = self.nextObstaclePosition + self.distanceBetweenObstacles;
         self.activeObstacleIndex = (self.activeObstacleIndex + 1) % self.totalObstacles;
+    }
+    
+    func triggerGameOver() {
+        self.userInteractionEnabled = false;
+        self.restartButton.userInteractionEnabled = true;
+        self.restartButton.visible = true;
+        self.bird.die();
+        self.birdSpeedX = 0;
+        self.bird.rotation = 90;
+        self.bird.physicsBody.allowsRotation = false;
+        
+        // just in case
+        self.bird.stopAllActions();
+        
+        let move = CCActionEaseBounceOut(action: CCActionMoveBy(duration: 0.2, position: ccp(0, 4)));
+        let moveBack = CCActionEaseBounceOut(action: move.reverse());
+        let shakeSequence = CCActionSequence(array: [move, moveBack]);
+        self.runAction(shakeSequence);
     }
 }

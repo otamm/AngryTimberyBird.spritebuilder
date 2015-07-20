@@ -20,6 +20,7 @@ class Bird:CCSprite {
     
     // makes deadEye visible.
     func die() {
-        self.deadEye.visible = true;
+        //self.deadEye.visible = true;
+        animationManager.runAnimationsForSequenceNamed("Die");
     }
 }
