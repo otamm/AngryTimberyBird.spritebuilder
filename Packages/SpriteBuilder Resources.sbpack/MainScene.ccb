@@ -10,7 +10,7 @@
 		<false/>
 	</dict>
 	<key>UUID</key>
-	<integer>27</integer>
+	<integer>29</integer>
 	<key>centeredOrigin</key>
 	<false/>
 	<key>currentResolution</key>
@@ -339,7 +339,7 @@
 					</dict>
 					<dict>
 						<key>UUID</key>
-						<integer>12</integer>
+						<integer>27</integer>
 						<key>baseClass</key>
 						<string>CCSprite</string>
 						<key>children</key>
@@ -347,9 +347,9 @@
 						<key>customClass</key>
 						<string></string>
 						<key>displayName</key>
-						<string>ground4</string>
+						<string>ground1</string>
 						<key>memberVarAssignmentName</key>
-						<string>ground2</string>
+						<string>ground1</string>
 						<key>memberVarAssignmentType</key>
 						<integer>1</integer>
 						<key>physicsBody</key>
@@ -383,32 +383,32 @@
 									<real>0.0</real>
 								</array>
 								<array>
-									<real>0.6875</real>
-									<real>126.953125</real>
+									<real>-0.74609375</real>
+									<real>145.5234375</real>
 								</array>
 								<array>
-									<real>320.73046875</real>
-									<real>130.640625</real>
+									<real>353.01840209960938</real>
+									<real>146.25675964355469</real>
 								</array>
 								<array>
-									<real>319.99609375</real>
-									<real>1.08984375</real>
+									<real>352</real>
+									<real>0.0</real>
 								</array>
 							</array>
 							<key>polygons</key>
 							<array>
 								<array>
 									<array>
-										<real>319.99609375</real>
-										<real>1.08984375</real>
+										<real>352</real>
+										<real>0.0</real>
 									</array>
 									<array>
-										<real>320.73046875</real>
-										<real>130.640625</real>
+										<real>353.01840209960938</real>
+										<real>146.25675964355469</real>
 									</array>
 									<array>
-										<real>0.6875</real>
-										<real>126.953125</real>
+										<real>-0.74609375</real>
+										<real>145.5234375</real>
 									</array>
 									<array>
 										<real>0.0</real>
@@ -434,8 +434,8 @@
 								<string>Position</string>
 								<key>value</key>
 								<array>
-									<real>320</real>
-									<real>80</real>
+									<real>0.0</real>
+									<real>88</real>
 									<integer>0</integer>
 									<integer>0</integer>
 									<integer>0</integer>
@@ -509,10 +509,12 @@
 								<array/>
 							</dict>
 						</array>
+						<key>selected</key>
+						<true/>
 					</dict>
 					<dict>
 						<key>UUID</key>
-						<integer>11</integer>
+						<integer>28</integer>
 						<key>baseClass</key>
 						<string>CCSprite</string>
 						<key>children</key>
@@ -520,9 +522,9 @@
 						<key>customClass</key>
 						<string></string>
 						<key>displayName</key>
-						<string>ground4</string>
+						<string>ground2</string>
 						<key>memberVarAssignmentName</key>
-						<string>ground1</string>
+						<string>ground2</string>
 						<key>memberVarAssignmentType</key>
 						<integer>1</integer>
 						<key>physicsBody</key>
@@ -556,32 +558,32 @@
 									<real>0.0</real>
 								</array>
 								<array>
-									<real>-0.97265625</real>
-									<real>128.57421875</real>
+									<real>-0.74609375</real>
+									<real>145.5234375</real>
 								</array>
 								<array>
-									<real>320.359375</real>
-									<real>129.53515625</real>
+									<real>353.01840209960938</real>
+									<real>146.25675964355469</real>
 								</array>
 								<array>
-									<real>320.82421875</real>
-									<real>0.796875</real>
+									<real>352</real>
+									<real>0.0</real>
 								</array>
 							</array>
 							<key>polygons</key>
 							<array>
 								<array>
 									<array>
-										<real>320.82421875</real>
-										<real>0.796875</real>
+										<real>352</real>
+										<real>0.0</real>
 									</array>
 									<array>
-										<real>320.359375</real>
-										<real>129.53515625</real>
+										<real>353.01840209960938</real>
+										<real>146.25675964355469</real>
 									</array>
 									<array>
-										<real>-0.97265625</real>
-										<real>128.57421875</real>
+										<real>-0.74609375</real>
+										<real>145.5234375</real>
 									</array>
 									<array>
 										<real>0.0</real>
@@ -607,8 +609,8 @@
 								<string>Position</string>
 								<key>value</key>
 								<array>
-									<real>0.0</real>
-									<real>80</real>
+									<real>352</real>
+									<real>88</real>
 									<integer>0</integer>
 									<integer>0</integer>
 									<integer>0</integer>
@@ -1107,8 +1109,6 @@
 						</array>
 					</dict>
 				</array>
-				<key>selected</key>
-				<true/>
 			</dict>
 		</array>
 		<key>customClass</key>

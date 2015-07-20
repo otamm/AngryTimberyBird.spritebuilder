@@ -25,7 +25,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     var birdSpeedX:CGFloat = 80;
     
     // array to hold the two ground blocks.
-    var groundBlocks:[CCSprite] = [];
+    var groundBlocks:[CCNode] = [];
     // specifies a minimum ground position before it is reassigned, giving the impression of movement.
     var minimumGroundPositionX:CGFloat!;
     // stores the index value in the groundBlocks array of the current ground block being checked for being offscreen.
@@ -71,6 +71,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         for i in 0..<3 {
             self.spawnNewObstacle();
         }
+        
         self.gamePhysicsNode.collisionDelegate = self;
         self.userInteractionEnabled = true;
     }
@@ -103,15 +104,16 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             self.bird.physicsBody.applyAngularImpulse(CGFloat(impulse));
         }*/
         // checks if ground block has gone totally offscreen. if that's the case, repositions it at the end of the next ground block.
-        let currentGround = self.groundBlocks[self.groundBlockIndex];
-        if (convertToNodeSpace(self.gamePhysicsNode.convertToWorldSpace(currentGround.position)).x <= self.minimumGroundPositionX) {
-            println("HI");
-            currentGround.position = ccp(-(self.minimumGroundPositionX * 2), currentGround.position.y);
-            self.groundBlockIndex = (self.groundBlockIndex + 1) % 2;
+        //let currentGround = self.groundBlocks[self.groundBlockIndex];
+        
+        //if (convertToNodeSpace(self.gamePhysicsNode.convertToWorldSpace(self.groundBlocks[self.groundBlockIndex].position)).x <= 0) {
+        if (convertToNodeSpace(self.gamePhysicsNode.convertToWorldSpace(self.groundBlocks[self.groundBlockIndex].position)).x <= self.minimumGroundPositionX) {
+            self.spawnNewGroundBlock();
+            
         }
         
-        let lastObstacle = self.obstacles[self.lastObstacleIndex];
-        if (convertToNodeSpace(self.gamePhysicsNode.convertToWorldSpace(lastObstacle.position)).x <= self.minimumObstaclePositionX) {
+        //let lastObstacle = self.obstacles[self.lastObstacleIndex];
+        if (convertToNodeSpace(self.gamePhysicsNode.convertToWorldSpace(self.obstacles[self.lastObstacleIndex].position)).x <= self.minimumObstaclePositionX) {
             println("HELLO");
             self.spawnNewObstacle();
             self.lastObstacleIndex = (self.lastObstacleIndex + 1) % self.totalObstacles;
@@ -121,7 +123,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     // listens for collision between bird and any 'level' object.
     func ccPhysicsCollisionBegin(pair: CCPhysicsCollisionPair!, bird: CCNode!, level: CCNode!) -> Bool {
         self.triggerGameOver();
-        return true
+        return true;
     }
     
     // listens for collisions between bird and goal, located between two pipes.
@@ -129,7 +131,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         self.score++;
         println("\(self.score)");
         //scoreLabel.string = String(points)
-        return true
+        return true;
     }
     
     /* button methods */
@@ -158,6 +160,21 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         self.obstacles[self.activeObstacleIndex].setupRandomPosition();
         self.nextObstaclePosition = self.nextObstaclePosition + self.distanceBetweenObstacles;
         self.activeObstacleIndex = (self.activeObstacleIndex + 1) % self.totalObstacles;
+    }
+    
+    // interchanges ground rendering
+    func spawnNewGroundBlock() {
+        println("AAA");
+        if (self.groundBlockIndex == 0) {
+            println("BBB");
+            self.ground1.position = ccp(self.ground1.position.x + 2 * 352, 88);
+        } else {
+            println("CCC");
+            self.ground2.position = ccp(self.ground2.position.x + 2 * 352, 88);
+        }
+        //self.groundBlocks[self.groundBlockIndex].position = ccp(-(self.minimumGroundPositionX), 0);
+        self.groundBlockIndex = (self.groundBlockIndex + 1) % 2;
+        
     }
     
     func triggerGameOver() {
