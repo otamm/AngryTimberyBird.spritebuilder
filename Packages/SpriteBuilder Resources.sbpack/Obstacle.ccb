@@ -51,7 +51,7 @@
 				<key>displayName</key>
 				<string>pipe4</string>
 				<key>memberVarAssignmentName</key>
-				<string></string>
+				<string>bottomPipe</string>
 				<key>memberVarAssignmentType</key>
 				<integer>1</integer>
 				<key>properties</key>
@@ -71,11 +71,11 @@
 						<string>Position</string>
 						<key>value</key>
 						<array>
-							<real>38.5</real>
-							<real>0.32499998807907104</real>
+							<real>51.5</real>
+							<real>182</real>
 							<integer>0</integer>
 							<integer>0</integer>
-							<integer>2</integer>
+							<integer>0</integer>
 						</array>
 					</dict>
 					<dict>
@@ -159,7 +159,7 @@
 				<key>displayName</key>
 				<string>upperPipe4</string>
 				<key>memberVarAssignmentName</key>
-				<string></string>
+				<string>upperPipe</string>
 				<key>memberVarAssignmentType</key>
 				<integer>1</integer>
 				<key>properties</key>
@@ -179,11 +179,11 @@
 						<string>Position</string>
 						<key>value</key>
 						<array>
-							<real>38.5</real>
-							<real>0.32499998807907104</real>
+							<real>51.5</real>
+							<real>183.65716552734375</real>
 							<integer>1</integer>
 							<integer>0</integer>
-							<integer>2</integer>
+							<integer>0</integer>
 						</array>
 					</dict>
 					<dict>
@@ -254,6 +254,8 @@
 						<array/>
 					</dict>
 				</array>
+				<key>selected</key>
+				<true/>
 			</dict>
 			<dict>
 				<key>UUID</key>
@@ -267,7 +269,7 @@
 				<key>displayName</key>
 				<string>goal</string>
 				<key>memberVarAssignmentName</key>
-				<string></string>
+				<string>goal</string>
 				<key>memberVarAssignmentType</key>
 				<integer>1</integer>
 				<key>properties</key>
@@ -288,7 +290,7 @@
 						<key>value</key>
 						<array>
 							<real>1</real>
-							<real>0.32499998807907104</real>
+							<real>0.36785712838172913</real>
 							<integer>0</integer>
 							<integer>2</integer>
 							<integer>2</integer>
@@ -302,9 +304,9 @@
 						<key>value</key>
 						<array>
 							<real>0.0099999997764825821</real>
-							<real>0.34999999403953552</real>
+							<real>140</real>
 							<integer>2</integer>
-							<integer>2</integer>
+							<integer>0</integer>
 						</array>
 					</dict>
 					<dict>
@@ -332,8 +334,6 @@
 						</array>
 					</dict>
 				</array>
-				<key>selected</key>
-				<true/>
 			</dict>
 		</array>
 		<key>customClass</key>
@@ -375,8 +375,8 @@
 				<string>Size</string>
 				<key>value</key>
 				<array>
-					<real>77</real>
-					<real>560</real>
+					<real>103</real>
+					<real>512</real>
 					<integer>0</integer>
 					<integer>0</integer>
 				</array>

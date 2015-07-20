@@ -118,7 +118,8 @@ class MainScene: CCNode {
     
     // creates and adds a new obstacle
     func spawnNewObstacle() {
-        self.obstacles[self.activeObstacleIndex].position = ccp(self.nextObstaclePosition, 0);
+        self.obstacles[self.activeObstacleIndex].position = ccp(self.nextObstaclePosition, -30);
+        self.obstacles[self.activeObstacleIndex].setupRandomPosition();
         self.nextObstaclePosition = self.nextObstaclePosition + self.distanceBetweenObstacles;
         self.activeObstacleIndex = (self.activeObstacleIndex + 1) % self.totalObstacles;
     }
