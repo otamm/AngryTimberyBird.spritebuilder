@@ -16,11 +16,21 @@ class Bird:CCSprite {
     
     /* custom variables */
     
+    /* cocos2d methods */
+    func didLoadFromCCB() {
+        //self.physicsBody = true;
+    }
+    
     /* custom methods */
     
     // makes deadEye visible.
     func die() {
         //self.deadEye.visible = true;
-        animationManager.runAnimationsForSequenceNamed("Die");
+        let random = CCRANDOM_0_1();
+        if (random > 0.5) {
+            animationManager.runAnimationsForSequenceNamed("DieDown");
+        } else {
+            animationManager.runAnimationsForSequenceNamed("DieUp");
+        }
     }
 }
