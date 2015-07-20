@@ -10,7 +10,7 @@
 		<false/>
 	</dict>
 	<key>UUID</key>
-	<integer>24</integer>
+	<integer>27</integer>
 	<key>centeredOrigin</key>
 	<false/>
 	<key>currentResolution</key>
@@ -863,8 +863,8 @@
 						<string>Size</string>
 						<key>value</key>
 						<array>
-							<real>40</real>
-							<real>40</real>
+							<real>192</real>
+							<real>192</real>
 							<integer>0</integer>
 							<integer>0</integer>
 						</array>
@@ -897,7 +897,7 @@
 						<string>String</string>
 						<key>value</key>
 						<array>
-							<string>Restart</string>
+							<string></string>
 							<false/>
 						</array>
 					</dict>
@@ -909,7 +909,7 @@
 						<key>value</key>
 						<array>
 							<string></string>
-							<string>ccbResources/ccbButtonNormal.png</string>
+							<string>iPad/world/restart4.png</string>
 						</array>
 					</dict>
 					<dict>
@@ -920,7 +920,7 @@
 						<key>value</key>
 						<array>
 							<string></string>
-							<string>ccbResources/ccbButtonHighlighted.png</string>
+							<string>iPad/world/restartActive4.png</string>
 						</array>
 					</dict>
 					<dict>
@@ -944,7 +944,7 @@
 						<key>value</key>
 						<array>
 							<string></string>
-							<string>ccbResources/ccbButtonNormal.png</string>
+							<string>iPad/world/restartActive4.png</string>
 						</array>
 					</dict>
 					<dict>
@@ -963,7 +963,7 @@
 						<key>value</key>
 						<array>
 							<string></string>
-							<string>ccbResources/ccbButtonNormal.png</string>
+							<string>iPad/world/restartActive4.png</string>
 						</array>
 					</dict>
 					<dict>
@@ -1248,9 +1248,9 @@
 			<key>name</key>
 			<string>Default Timeline</string>
 			<key>offset</key>
-			<real>0.033333335071802139</real>
+			<real>0.97968763113021851</real>
 			<key>position</key>
-			<real>3.2333333492279053</real>
+			<real>4.3000001907348633</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
