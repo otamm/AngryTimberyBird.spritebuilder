@@ -86,7 +86,6 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         
         // moves bird horizontally on screen.
         // self.bird.position = ccp(self.bird.position.x + birdSpeedX * CGFloat(delta), self.bird.position.y);
-        self.bird.position.x += self.birdSpeedX * CGFloat(delta);
         
         // moves physics node to the left,which repositions every child of it (bird horizontal position is cancelled out)
         self.gamePhysicsNode.position.x -= self.birdSpeedX * CGFloat(delta);
@@ -104,13 +103,13 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             let impulse = -18000.0 * delta;
             self.bird.physicsBody.applyAngularImpulse(CGFloat(impulse));
         }
+        self.bird.position.x += self.birdSpeedX * CGFloat(delta);
         // checks if ground block has gone totally offscreen. if that's the case, repositions it at the end of the next ground block.
         //let currentGround = self.groundBlocks[self.groundBlockIndex];
         
         //if (convertToNodeSpace(self.gamePhysicsNode.convertToWorldSpace(self.groundBlocks[self.groundBlockIndex].position)).x <= 0) {
         if (convertToNodeSpace(self.gamePhysicsNode.convertToWorldSpace(self.groundBlocks[self.groundBlockIndex].position)).x <= self.minimumGroundPositionX) {
             self.spawnNewGroundBlock();
-            
         }
         
         //let lastObstacle = self.obstacles[self.lastObstacleIndex];

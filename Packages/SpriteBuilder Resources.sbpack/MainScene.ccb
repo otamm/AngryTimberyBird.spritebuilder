@@ -302,8 +302,6 @@
 								<string>Bird.ccb</string>
 							</dict>
 						</array>
-						<key>selected</key>
-						<true/>
 					</dict>
 					<dict>
 						<key>UUID</key>
@@ -877,7 +875,7 @@
 						<key>value</key>
 						<array>
 							<string></string>
-							<string>iPad/world/restart4.png</string>
+							<string>iPad/buttons/restart4.png</string>
 						</array>
 					</dict>
 					<dict>
@@ -888,7 +886,7 @@
 						<key>value</key>
 						<array>
 							<string></string>
-							<string>iPad/world/restartActive4.png</string>
+							<string>iPad/buttons/restartActive4.png</string>
 						</array>
 					</dict>
 					<dict>
@@ -912,7 +910,7 @@
 						<key>value</key>
 						<array>
 							<string></string>
-							<string>iPad/world/restartActive4.png</string>
+							<string>iPad/buttons/restartActive4.png</string>
 						</array>
 					</dict>
 					<dict>
@@ -931,7 +929,7 @@
 						<key>value</key>
 						<array>
 							<string></string>
-							<string>iPad/world/restartActive4.png</string>
+							<string>iPad/buttons/restartActive4.png</string>
 						</array>
 					</dict>
 					<dict>
@@ -1075,6 +1073,8 @@
 						</array>
 					</dict>
 				</array>
+				<key>selected</key>
+				<true/>
 			</dict>
 		</array>
 		<key>customClass</key>

@@ -18,7 +18,7 @@ class Bird:CCSprite {
     
     /* cocos2d methods */
     func didLoadFromCCB() {
-        //self.physicsBody = true;
+        //self.physicsBody.sensor = true;
     }
     
     /* custom methods */
