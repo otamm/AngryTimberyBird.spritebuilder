@@ -91,7 +91,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         self.gamePhysicsNode.position.x -= self.birdSpeedX * CGFloat(delta);
         
         self.sinceTouch += delta; // updates timer
-        self.bird.rotation = clampf(self.bird.rotation, -30, 90); // updates rotation, value is clamped to not let bird spin around itself.
+        /*self.bird.rotation = clampf(self.bird.rotation, -30, 90); // updates rotation, value is clamped to not let bird spin around itself.
         
         // will update bird's angular velocity if the value is not at a minimum or maximum.
         if (self.bird.physicsBody.allowsRotation) {
@@ -102,7 +102,8 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         if (self.sinceTouch > 0.3) {
             let impulse = -18000.0 * delta;
             self.bird.physicsBody.applyAngularImpulse(CGFloat(impulse));
-        }
+        }*/
+        
         self.bird.position.x += self.birdSpeedX * CGFloat(delta);
         // checks if ground block has gone totally offscreen. if that's the case, repositions it at the end of the next ground block.
         //let currentGround = self.groundBlocks[self.groundBlockIndex];
@@ -147,7 +148,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         // makes bird go up
         self.bird.physicsBody.applyImpulse(ccp(0, 300));
         // makes bird rotate up
-        self.bird.physicsBody.applyAngularImpulse(10000);
+        //self.bird.physicsBody.applyAngularImpulse(10000);
         // resets timer
         self.sinceTouch = 0;
     }

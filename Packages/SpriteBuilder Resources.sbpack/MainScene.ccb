@@ -10,7 +10,7 @@
 		<false/>
 	</dict>
 	<key>UUID</key>
-	<integer>29</integer>
+	<integer>30</integer>
 	<key>centeredOrigin</key>
 	<false/>
 	<key>currentResolution</key>
@@ -349,12 +349,12 @@
 									<real>0.0</real>
 								</array>
 								<array>
-									<real>-0.74609375</real>
-									<real>145.5234375</real>
+									<real>-0.88671875</real>
+									<real>157.2578125</real>
 								</array>
 								<array>
-									<real>353.01840209960938</real>
-									<real>146.25675964355469</real>
+									<real>353.58984375</real>
+									<real>155.2578125</real>
 								</array>
 								<array>
 									<real>352</real>
@@ -369,12 +369,12 @@
 										<real>0.0</real>
 									</array>
 									<array>
-										<real>353.01840209960938</real>
-										<real>146.25675964355469</real>
+										<real>353.58984375</real>
+										<real>155.2578125</real>
 									</array>
 									<array>
-										<real>-0.74609375</real>
-										<real>145.5234375</real>
+										<real>-0.88671875</real>
+										<real>157.2578125</real>
 									</array>
 									<array>
 										<real>0.0</real>
@@ -1073,8 +1073,6 @@
 						</array>
 					</dict>
 				</array>
-				<key>selected</key>
-				<true/>
 			</dict>
 		</array>
 		<key>customClass</key>
@@ -1214,9 +1212,9 @@
 			<key>name</key>
 			<string>Default Timeline</string>
 			<key>offset</key>
-			<real>0.97968763113021851</real>
+			<real>4.9796876907348633</real>
 			<key>position</key>
-			<real>4.3000001907348633</real>
+			<real>8.3000001907348633</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
