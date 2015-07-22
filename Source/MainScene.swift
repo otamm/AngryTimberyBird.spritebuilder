@@ -54,6 +54,12 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     var pigs:[Pig] = [];
     // keeps track of pig to be spawned next
     var activePigIndex:Int = 0;
+    // stores pig width to check when pig has gone offscreen
+    var minusPigWidth:CGFloat!;
+    // checks index of an eventually non-popped pig that might have gone offscreen
+    var offscreenPigIndex:Int = 0;
+    // keeps track of total number of pigs to respawn a pig only after (number_of_pigs) obstacles from the position it was popped.
+    var totalPigs:CGFloat!;
     
     /* cocos2d methods */
     
@@ -75,18 +81,25 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             self.obstaclesLayer.addChild(obstacle);
         }
         var pig:Pig;
+        // will be used to position first three pigs along Y axis
+        var random:CGFloat;
+        
         for i in 0..<3 {
             pig = CCBReader.load("Pig") as! Pig;
             self.pigs.append(pig);
             self.gamePhysicsNode.addChild(pig);
+            random = (CGFloat(CCRANDOM_0_1()) * self.usableScreenSize) + 2 * self.groundHeight;
+            pig.position = CGPoint(x: (self.distanceBetweenObstacles / 2) + self.nextObstaclePosition + (CGFloat(i) * self.distanceBetweenObstacles), y:random);
         }
+        self.minusPigWidth = -(self.pigs[0].contentSize.width);
         
         self.totalObstacles = self.obstacles.count;
+        self.totalPigs = CGFloat(self.pigs.count);
         self.minimumObstaclePositionX = -self.obstacles[0].contentSize.width;
         
         for i in 0..<3 {
             self.spawnNewObstacle();
-            self.spawnNewPig();
+            //self.spawnNewPig();
         }
         
         
@@ -134,9 +147,12 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         
         //let lastObstacle = self.obstacles[self.lastObstacleIndex];
         if (convertToNodeSpace(self.gamePhysicsNode.convertToWorldSpace(self.obstacles[self.lastObstacleIndex].position)).x <= self.minimumObstaclePositionX) {
-            println("HELLO");
             self.spawnNewObstacle();
             self.lastObstacleIndex = (self.lastObstacleIndex + 1) % self.totalObstacles;
+        }
+        
+        if (convertToNodeSpace(self.gamePhysicsNode.convertToWorldSpace(self.pigs[self.offscreenPigIndex].position)).x <= self.minusPigWidth) {
+            self.spawnNewPig();
         }
     }
     
@@ -210,9 +226,9 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     func spawnNewPig() {
         let random = (CGFloat(CCRANDOM_0_1()) * self.usableScreenSize) + 2 * self.groundHeight;
         //self.pigs[self.activePigIndex].runAction(CCActionMoveBy(duration: 0.2, position: CGPoint(x: 0, y: 500)));
-        self.pigs[self.activePigIndex].position = ccp((self.distanceBetweenObstacles / 2) + self.nextObstaclePosition, random);
+        self.pigs[self.activePigIndex].position = ccp((self.distanceBetweenObstacles / 2) + self.nextObstaclePosition + (self.totalPigs * self.distanceBetweenObstacles), random);
         self.pigs[self.activePigIndex].revive();
-        self.activePigIndex = (self.activePigIndex + 1) % pigs.count;
+        self.activePigIndex = (self.activePigIndex + 1) % self.pigs.count;
         self.unschedule("spawnNewPig");
     }
     
