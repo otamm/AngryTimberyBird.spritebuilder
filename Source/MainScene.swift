@@ -20,10 +20,12 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     
     // will keep track of how much time has passed since last touch. Initialized to 0.
     var sinceTouch:CCTime = 0;
-    
+    // value of total screen height minus ground height.
+    var usableScreenSize:CGFloat!;
+    // ground height to be used with variable above.
+    var groundHeight:CGFloat!;
     // constant speed of horizontal movement.
     var birdSpeedX:CGFloat = 80;
-    
     // array to hold the two ground blocks.
     var groundBlocks:[CCNode] = [];
     // specifies a minimum ground position before it is reassigned, giving the impression of movement.
@@ -48,6 +50,10 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     var minimumObstaclePositionX:CGFloat!;
     // keeps track of current score.
     var score:Int = 0;
+    // hold pigs
+    var pigs:[Pig] = [];
+    // keeps track of pig to be spawned next
+    var activePigIndex:Int = 0;
     
     /* cocos2d methods */
     
@@ -57,12 +63,22 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         self.groundBlocks.append(self.ground2);
         self.minimumGroundPositionX = -self.ground1.contentSize.width;
         
+        self.groundHeight = self.ground1.contentSize.height;
+        self.usableScreenSize = self.contentSize.height - self.groundHeight;
+        
         self.nextObstaclePosition = self.firstObstaclePosition;
+        
         var obstacle:Obstacle;
         for i in 0..<3 {
             obstacle = CCBReader.load("Obstacle") as! Obstacle;
             self.obstacles.append(obstacle);
             self.obstaclesLayer.addChild(obstacle);
+        }
+        var pig:Pig;
+        for i in 0..<3 {
+            pig = CCBReader.load("Pig") as! Pig;
+            self.pigs.append(pig);
+            self.gamePhysicsNode.addChild(pig);
         }
         
         self.totalObstacles = self.obstacles.count;
@@ -70,7 +86,10 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         
         for i in 0..<3 {
             self.spawnNewObstacle();
+            self.spawnNewPig();
         }
+        
+        
         
         self.gamePhysicsNode.collisionDelegate = self;
         self.userInteractionEnabled = true;
@@ -135,6 +154,18 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         return true;
     }
     
+    // listens for collision between bird and any 'level' object.
+    func ccPhysicsCollisionBegin(pair: CCPhysicsCollisionPair!, bird: CCNode!, pig: CCNode!) -> Bool {
+        self.pigs[self.activePigIndex].die();
+        // pig popped is respawned as soon as dying animation (12 frames long, more or less 0.2 seconds) ends
+        //self.pigs[self.activePigIndex].runAction(CCActionSequence(array: [CCActionDelay(duration: 0.3), self.spawnNewPig()]));
+        //self.spawnNewPig();
+        //self.spawnNewPig();
+        self.schedule("pigAscending", interval: 0.1);
+        self.schedule("spawnNewPig", interval: 0.3);
+        return true;
+    }
+    
     /* button methods */
     
     func restart() {
@@ -165,12 +196,9 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     
     // interchanges ground rendering
     func spawnNewGroundBlock() {
-        println("AAA");
         if (self.groundBlockIndex == 0) {
-            println("BBB");
             self.ground1.position = ccp(self.ground1.position.x + 2 * 352, 88);
         } else {
-            println("CCC");
             self.ground2.position = ccp(self.ground2.position.x + 2 * 352, 88);
         }
         //self.groundBlocks[self.groundBlockIndex].position = ccp(-(self.minimumGroundPositionX), 0);
@@ -178,6 +206,20 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         
     }
     
+    // spawns pig at new location
+    func spawnNewPig() {
+        let random = (CGFloat(CCRANDOM_0_1()) * self.usableScreenSize) + 2 * self.groundHeight;
+        //self.pigs[self.activePigIndex].runAction(CCActionMoveBy(duration: 0.2, position: CGPoint(x: 0, y: 500)));
+        self.pigs[self.activePigIndex].position = ccp((self.distanceBetweenObstacles / 2) + self.nextObstaclePosition, random);
+        self.pigs[self.activePigIndex].revive();
+        self.activePigIndex = (self.activePigIndex + 1) % pigs.count;
+        self.unschedule("spawnNewPig");
+    }
+    
+    func pigAscending() {
+        self.pigs[self.activePigIndex].runAction(CCActionMoveBy(duration: 0.2, position: CGPoint(x: 0, y: 500)));
+        self.unschedule("pigAscending");
+    }
     func triggerGameOver() {
         self.userInteractionEnabled = false;
         self.restartButton.userInteractionEnabled = true;

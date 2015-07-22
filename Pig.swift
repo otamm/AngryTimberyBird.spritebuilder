@@ -17,4 +17,8 @@ class Pig:CCSprite {
     func die() {
         animationManager.runAnimationsForSequenceNamed("Die");
     }
+    
+    func revive() {
+        animationManager.runAnimationsForSequenceNamed("FlapWings");
+    }
 }
