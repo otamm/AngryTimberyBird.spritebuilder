@@ -247,6 +247,10 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         self.userInteractionEnabled = false;
         self.restartButton.userInteractionEnabled = true;
         self.restartButton.visible = true;
+        // set pigs' collision mask to an empty array, preventing bird popping a pig after game is over.
+        for p in 0..<self.pigs.count {
+            self.pigs[p].physicsBody.collisionMask = [];
+        }
         self.bird.die();
         self.birdSpeedX = 0;
         self.bird.rotation = 90;

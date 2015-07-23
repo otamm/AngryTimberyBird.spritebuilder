@@ -27,7 +27,7 @@ class Obstacle:CCNode {
         // enables collision detection.
         self.upperPipe.physicsBody.sensor = true;
         self.bottomPipe.physicsBody.sensor = true;
-        self.goal.physicsBody.sensor = true;
+        //self.goal.physicsBody.sensor = true;
     }
     
     /* custom methods */
