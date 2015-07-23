@@ -62,6 +62,11 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     var lastPoppedPig:Int = 0;
     // keeps track of total number of pigs to respawn a pig only after (number_of_pigs) obstacles from the position it was popped.
     var totalPigs:CGFloat!;
+    // these will be checked once a goal is passed, positions will be updated elsewhere due to performance reasons.
+    var somethingNeedsRepositioning:Bool = false;
+    var groundBlockNeedsRepositioning:Bool = false;
+    var pigNeedsRepositioning:Bool = false;
+    var obstacleNeedsRepositioning:Bool = false;
     
     /* cocos2d methods */
     
@@ -139,23 +144,20 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             let impulse = -18000.0 * delta;
             self.bird.physicsBody.applyAngularImpulse(CGFloat(impulse));
         }*/
-        // checks if ground block has gone totally offscreen. if that's the case, repositions it at the end of the next ground block.
-        //let currentGround = self.groundBlocks[self.groundBlockIndex];
-        
-        //if (convertToNodeSpace(self.gamePhysicsNode.convertToWorldSpace(self.groundBlocks[self.groundBlockIndex].position)).x <= 0) {
-        if (convertToNodeSpace(self.gamePhysicsNode.convertToWorldSpace(self.groundBlocks[self.groundBlockIndex].position)).x <= self.minimumGroundPositionX) {
-            self.spawnNewGroundBlock();
-        }
-        
-        //let lastObstacle = self.obstacles[self.lastObstacleIndex];
-        if (convertToNodeSpace(self.gamePhysicsNode.convertToWorldSpace(self.obstacles[self.lastObstacleIndex].position)).x <= self.minimumObstaclePositionX) {
-            self.spawnNewObstacle();
-            self.lastObstacleIndex = (self.lastObstacleIndex + 1) % self.totalObstacles;
-        }
-        
-        if (convertToNodeSpace(self.gamePhysicsNode.convertToWorldSpace(self.pigs[self.offscreenPigIndex].position)).x <= self.minusPigWidth) {
-            println("JJJJ");
-            self.spawnNewPig();
+        if (self.somethingNeedsRepositioning) {
+            if (self.groundBlockNeedsRepositioning) {
+                self.spawnNewGroundBlock();
+                self.groundBlockNeedsRepositioning = false;
+            }
+            if (self.pigNeedsRepositioning) {
+                self.spawnNewPig();
+                self.pigNeedsRepositioning = false;
+            }
+            if (self.obstacleNeedsRepositioning) {
+                self.spawnNewObstacle();
+                self.obstacleNeedsRepositioning = false;
+            }
+            self.somethingNeedsRepositioning = false;
         }
     }
     
@@ -168,9 +170,23 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     // listens for collisions between bird and goal, located between two pipes.
     func ccPhysicsCollisionBegin(pair: CCPhysicsCollisionPair!, bird: CCNode!, goal: Goal!) -> Bool {
         self.score += 1000;
-        println("GOAL PASSED!");
         println("\(self.score)");
-        //scoreLabel.string = String(points)
+        if (convertToNodeSpace(self.gamePhysicsNode.convertToWorldSpace(self.groundBlocks[self.groundBlockIndex].position)).x <= self.minimumGroundPositionX) {
+            self.somethingNeedsRepositioning = true;
+            self.groundBlockNeedsRepositioning = true;
+        }
+        
+        if (convertToNodeSpace(self.gamePhysicsNode.convertToWorldSpace(self.obstacles[self.activeObstacleIndex].position)).x <= self.minimumObstaclePositionX) {
+            self.somethingNeedsRepositioning = true;
+            self.obstacleNeedsRepositioning = true;
+            //self.lastObstacleIndex = (self.lastObstacleIndex + 1) % self.totalObstacles;
+        }
+        
+        if (convertToNodeSpace(self.gamePhysicsNode.convertToWorldSpace(self.pigs[self.offscreenPigIndex].position)).x <= self.minusPigWidth) {
+            self.somethingNeedsRepositioning = true;
+            self.pigNeedsRepositioning = true;
+        }
+        
         return true;
     }
     
@@ -247,14 +263,16 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         self.userInteractionEnabled = false;
         self.restartButton.userInteractionEnabled = true;
         self.restartButton.visible = true;
-        // set pigs' collision mask to an empty array, preventing bird popping a pig after game is over.
-        for p in 0..<self.pigs.count {
-            self.pigs[p].physicsBody.collisionMask = [];
-        }
         self.bird.die();
         self.birdSpeedX = 0;
         self.bird.rotation = 90;
         self.bird.physicsBody.allowsRotation = false;
+        
+        // set pigs' collision mask to an empty array, preventing bird popping a pig after game is over.
+        for p in 0..<self.pigs.count {
+            self.pigs[p].physicsBody.collisionMask = [];
+        }
+        
         
         // just in case
         self.bird.stopAllActions();
