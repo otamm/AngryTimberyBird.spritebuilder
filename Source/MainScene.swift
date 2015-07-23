@@ -86,6 +86,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         
         for i in 0..<3 {
             pig = CCBReader.load("Pig") as! Pig;
+            pig.index = i;
             self.pigs.append(pig);
             self.gamePhysicsNode.addChild(pig);
             random = (CGFloat(CCRANDOM_0_1()) * self.usableScreenSize) + 2 * self.groundHeight;
@@ -171,13 +172,13 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     }
     
     // listens for collision between bird and any 'level' object.
-    func ccPhysicsCollisionBegin(pair: CCPhysicsCollisionPair!, bird: CCNode!, pig: CCNode!) -> Bool {
-        self.pigs[self.activePigIndex].die();
+    func ccPhysicsCollisionBegin(pair: CCPhysicsCollisionPair!, bird: CCNode!, pig: Pig!) -> Bool {
+        self.pigs[pig.index].die();
         // pig popped is respawned as soon as dying animation (12 frames long, more or less 0.2 seconds) ends
         //self.pigs[self.activePigIndex].runAction(CCActionSequence(array: [CCActionDelay(duration: 0.3), self.spawnNewPig()]));
         //self.spawnNewPig();
         //self.spawnNewPig();
-        self.schedule("pigAscending", interval: 0.1);
+        //self.schedule("pigAscending", interval: 0.1);
         self.schedule("spawnNewPig", interval: 0.3);
         return true;
     }
@@ -232,10 +233,10 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         self.unschedule("spawnNewPig");
     }
     
-    func pigAscending() {
+    /*func pigAscending() {
         self.pigs[self.activePigIndex].runAction(CCActionMoveBy(duration: 0.2, position: CGPoint(x: 0, y: 500)));
         self.unschedule("pigAscending");
-    }
+    }*/
     func triggerGameOver() {
         self.userInteractionEnabled = false;
         self.restartButton.userInteractionEnabled = true;

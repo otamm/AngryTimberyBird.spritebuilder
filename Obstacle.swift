@@ -12,7 +12,7 @@ class Obstacle:CCNode {
     /* linked objects */
     weak var upperPipe:CCNode!;
     weak var bottomPipe:CCNode!;
-    weak var goal:CCNode!;
+    weak var goal:Goal!;
     
     /* custom variables */
     let bottomPipeMinimumPositionY:CGFloat = 182;
@@ -38,6 +38,6 @@ class Obstacle:CCNode {
         //
         self.bottomPipe.position = ccp(0, self.bottomPipeMinimumPositionY + random);
         self.upperPipe.position = ccp(0, self.upperPipeMaximumPositionY - random);
-        self.goal.position = ccp(77, self.bottomPipe.position.y);
+        //self.goal.position = ccp(77, self.bottomPipe.position.y);
     }
 }
