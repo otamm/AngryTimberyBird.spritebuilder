@@ -195,7 +195,7 @@
 			<key>allowsRotation</key>
 			<true/>
 			<key>bodyShape</key>
-			<integer>1</integer>
+			<integer>0</integer>
 			<key>collisionCategories</key>
 			<array/>
 			<key>collisionMask</key>
@@ -203,7 +203,7 @@
 			<key>collisionType</key>
 			<string>pig</string>
 			<key>cornerRadius</key>
-			<real>58.4921875</real>
+			<real>0.0</real>
 			<key>density</key>
 			<real>1</real>
 			<key>dynamic</key>
@@ -215,12 +215,75 @@
 			<key>points</key>
 			<array>
 				<array>
-					<real>64.7421875</real>
-					<real>56.0625</real>
+					<real>13.50554084777832</real>
+					<real>10.232414245605469</real>
+				</array>
+				<array>
+					<real>4.9824247360229492</real>
+					<real>20.724601745605469</real>
+				</array>
+				<array>
+					<real>4.6992735862731934</real>
+					<real>37.570808410644531</real>
+				</array>
+				<array>
+					<real>17.67747688293457</real>
+					<real>48.005844116210938</real>
+				</array>
+				<array>
+					<real>44.550880432128906</real>
+					<real>47.288875579833984</real>
+				</array>
+				<array>
+					<real>60.163169860839844</real>
+					<real>40.999797821044922</real>
+				</array>
+				<array>
+					<real>60.571010589599609</real>
+					<real>16.599424362182617</real>
+				</array>
+				<array>
+					<real>51.969963073730469</real>
+					<real>10.380484580993652</real>
 				</array>
 			</array>
 			<key>polygons</key>
-			<array/>
+			<array>
+				<array>
+					<array>
+						<real>51.969963073730469</real>
+						<real>10.380484580993652</real>
+					</array>
+					<array>
+						<real>60.571010589599609</real>
+						<real>16.599424362182617</real>
+					</array>
+					<array>
+						<real>60.163169860839844</real>
+						<real>40.999797821044922</real>
+					</array>
+					<array>
+						<real>44.550880432128906</real>
+						<real>47.288875579833984</real>
+					</array>
+					<array>
+						<real>17.67747688293457</real>
+						<real>48.005844116210938</real>
+					</array>
+					<array>
+						<real>4.6992735862731934</real>
+						<real>37.570808410644531</real>
+					</array>
+					<array>
+						<real>4.9824247360229492</real>
+						<real>20.724601745605469</real>
+					</array>
+					<array>
+						<real>13.50554084777832</real>
+						<real>10.232414245605469</real>
+					</array>
+				</array>
+			</array>
 		</dict>
 		<key>properties</key>
 		<array>

@@ -50,14 +50,16 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     var minimumObstaclePositionX:CGFloat!;
     // keeps track of current score.
     var score:Int = 0;
+    // multiplies current score for popping pigs if on a streak.
+    var scoreMultiplier:Int = 0;
     // hold pigs
     var pigs:[Pig] = [];
-    // keeps track of pig to be spawned next
-    var activePigIndex:Int = 0;
     // stores pig width to check when pig has gone offscreen
     var minusPigWidth:CGFloat!;
     // checks index of an eventually non-popped pig that might have gone offscreen
     var offscreenPigIndex:Int = 0;
+    // checks index of last popped pig
+    var lastPoppedPig:Int = 0;
     // keeps track of total number of pigs to respawn a pig only after (number_of_pigs) obstacles from the position it was popped.
     var totalPigs:CGFloat!;
     
@@ -90,7 +92,8 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             self.pigs.append(pig);
             self.gamePhysicsNode.addChild(pig);
             random = (CGFloat(CCRANDOM_0_1()) * self.usableScreenSize) + 2 * self.groundHeight;
-            pig.position = CGPoint(x: (self.distanceBetweenObstacles / 2) + self.nextObstaclePosition + (CGFloat(i) * self.distanceBetweenObstacles), y:random);
+            //random = (CGFloat(arc4random_uniform(UInt32(self.usableScreenSize)))) + self.groundHeight;
+            pig.position = CGPoint(x: (self.distanceBetweenObstacles / 2) + self.nextObstaclePosition + (CGFloat(i) * self.distanceBetweenObstacles), y: random);
         }
         self.minusPigWidth = -(self.pigs[0].contentSize.width);
         
@@ -118,12 +121,12 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         self.bird.physicsBody.velocity = ccp(0, CGFloat(velocityY));
         
         // moves bird horizontally on screen.
-        // self.bird.position = ccp(self.bird.position.x + birdSpeedX * CGFloat(delta), self.bird.position.y);
+        self.bird.position.x += self.birdSpeedX * CGFloat(delta);
         
-        // moves physics node to the left,which repositions every child of it (bird horizontal position is cancelled out)
+        // moves physics node to the left, which repositions every child of it (bird horizontal position is cancelled out)
         self.gamePhysicsNode.position.x -= self.birdSpeedX * CGFloat(delta);
         
-        self.sinceTouch += delta; // updates timer
+        //self.sinceTouch += delta; // updates timer
         /*self.bird.rotation = clampf(self.bird.rotation, -30, 90); // updates rotation, value is clamped to not let bird spin around itself.
         
         // will update bird's angular velocity if the value is not at a minimum or maximum.
@@ -136,8 +139,6 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             let impulse = -18000.0 * delta;
             self.bird.physicsBody.applyAngularImpulse(CGFloat(impulse));
         }*/
-        
-        self.bird.position.x += self.birdSpeedX * CGFloat(delta);
         // checks if ground block has gone totally offscreen. if that's the case, repositions it at the end of the next ground block.
         //let currentGround = self.groundBlocks[self.groundBlockIndex];
         
@@ -153,6 +154,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         }
         
         if (convertToNodeSpace(self.gamePhysicsNode.convertToWorldSpace(self.pigs[self.offscreenPigIndex].position)).x <= self.minusPigWidth) {
+            println("JJJJ");
             self.spawnNewPig();
         }
     }
@@ -164,8 +166,9 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     }
     
     // listens for collisions between bird and goal, located between two pipes.
-    func ccPhysicsCollisionBegin(pair: CCPhysicsCollisionPair!, bird: CCNode!, goal: CCNode!) -> Bool {
-        self.score++;
+    func ccPhysicsCollisionBegin(pair: CCPhysicsCollisionPair!, bird: CCNode!, goal: Goal!) -> Bool {
+        self.score += 1000;
+        println("GOAL PASSED!");
         println("\(self.score)");
         //scoreLabel.string = String(points)
         return true;
@@ -174,12 +177,10 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     // listens for collision between bird and any 'level' object.
     func ccPhysicsCollisionBegin(pair: CCPhysicsCollisionPair!, bird: CCNode!, pig: Pig!) -> Bool {
         self.pigs[pig.index].die();
-        // pig popped is respawned as soon as dying animation (12 frames long, more or less 0.2 seconds) ends
-        //self.pigs[self.activePigIndex].runAction(CCActionSequence(array: [CCActionDelay(duration: 0.3), self.spawnNewPig()]));
-        //self.spawnNewPig();
-        //self.spawnNewPig();
-        //self.schedule("pigAscending", interval: 0.1);
-        self.schedule("spawnNewPig", interval: 0.3);
+        self.lastPoppedPig = pig.index;
+        self.scoreMultiplier++;
+        self.score = self.score + (1000 * self.scoreMultiplier);
+        println("\(self.score)");
         return true;
     }
     
@@ -226,11 +227,16 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     // spawns pig at new location
     func spawnNewPig() {
         let random = (CGFloat(CCRANDOM_0_1()) * self.usableScreenSize) + 2 * self.groundHeight;
-        //self.pigs[self.activePigIndex].runAction(CCActionMoveBy(duration: 0.2, position: CGPoint(x: 0, y: 500)));
-        self.pigs[self.activePigIndex].position = ccp((self.distanceBetweenObstacles / 2) + self.nextObstaclePosition + (self.totalPigs * self.distanceBetweenObstacles), random);
-        self.pigs[self.activePigIndex].revive();
-        self.activePigIndex = (self.activePigIndex + 1) % self.pigs.count;
-        self.unschedule("spawnNewPig");
+        self.pigs[self.offscreenPigIndex].position = ccp((self.distanceBetweenObstacles / 2) + self.nextObstaclePosition + (self.totalPigs * self.distanceBetweenObstacles), random);
+        // if last pig to go offscreen was popped, revive it before repositioning. Else, set score multiplier to 0.
+        if (self.offscreenPigIndex == self.lastPoppedPig) {
+            self.pigs[self.offscreenPigIndex].revive();
+        } else {
+            self.scoreMultiplier = 0;
+        }
+            self.pigs[self.offscreenPigIndex].revive();
+        self.offscreenPigIndex = (self.offscreenPigIndex + 1) % self.pigs.count;
+        //self.unschedule("spawnNewPig");
     }
     
     /*func pigAscending() {
