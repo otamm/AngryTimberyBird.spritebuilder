@@ -333,8 +333,8 @@
 				<string>Size</string>
 				<key>value</key>
 				<array>
-					<real>0.0</real>
-					<real>0.0</real>
+					<real>384</real>
+					<real>512</real>
 					<integer>0</integer>
 					<integer>0</integer>
 				</array>
