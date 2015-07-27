@@ -12,20 +12,20 @@ class Pig:CCSprite {
     // index of pig inside pigs array
     var index:Int!;
     // checks wheter pig was popped or not.
-    //var isPopped:Bool = false;
+    var isPopped:Bool = false;
     
     func didLoadFromCCB() {
         self.physicsBody.sensor = true;
     }
     
     func die() {
-    //    self.isPopped = true;
+        self.isPopped = true;
         self.runAction(CCActionMoveBy(duration: 0.2, position: CGPoint(x: 0, y: 500)));
         animationManager.runAnimationsForSequenceNamed("Die");
     }
     
     func revive() {
-    //    self.isPopped = false;
+        self.isPopped = false;
         animationManager.runAnimationsForSequenceNamed("FlapWings");
     }
 }
