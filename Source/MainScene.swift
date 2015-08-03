@@ -21,6 +21,9 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     weak var background3:CCNode!;*/
     // layer which contain background nodes.
     weak var backgroundLayer:CCNode!;
+    // layer which contains pigs
+    weak var pigsLayer:CCNode!;
+    
     
     /* custom variables */
     
@@ -89,27 +92,17 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     func didLoadFromCCB() {
         self.nextObstaclePosition = self.firstObstaclePosition;
         
-        /*self.backgrounds.append(self.background1);
-        self.backgrounds.append(self.background2);
-        self.backgrounds.append(self.background3);*/
         var background:Background;
-        
-        /*for i in 0..<3 {
-            background = CCBReader.load("Background") as! Background;
-            self.backgroundLayer.addChild(background);
-            self.backgrounds.append(background);
-            //self.backgrounds[i].position = ccp(x: )
-        }*/
-        //self.minusBackgroundWidth = -self.background1.contentSize.width;
-        
         var obstacle:Obstacle;
         var groundBlock:Ground;
-        for i in 0..<3 {
-            
+        
+        for i in 0..<4 {
+            // add backgrounds and position them
             background = CCBReader.load("Background") as! Background;
             self.backgroundLayer.addChild(background);
             self.backgrounds.append(background);
-            self.backgrounds[i].position = CGPoint(x: background.backgroundWidth * CGFloat(i), y: 0);
+            self.backgrounds[i].position = CGPoint(x: background.contentSize.width * CGFloat(i), y: 0);
+            
             // add obstacles, which will be spawned later.
             obstacle = CCBReader.load("Obstacle") as! Obstacle;
             self.obstacles.append(obstacle);
@@ -119,8 +112,10 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             groundBlock = CCBReader.load("Ground") as! Ground;
             self.groundBlocks.append(groundBlock);
             self.groundBlocksLayer.addChild(self.groundBlocks[i]);
-            self.groundBlocks[i].position = CGPoint(x: groundBlock.contentSize.width * CGFloat(i), y: -30);
+            self.groundBlocks[i].position = CGPoint(x: groundBlock.contentSize.width * CGFloat(i), y: 0);
         }
+        
+        self.minusBackgroundWidth = -self.backgrounds[0].contentSize.width;
         
         self.groundHeight = self.groundBlocks[0].contentSize.height;
         self.groundWidth = self.groundBlocks[0].contentSize.width;
@@ -133,11 +128,11 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         // will be used to position first three pigs along Y axis
         var random:CGFloat;
         
-        for i in 0..<3 {
+        for i in 0..<4 {
             pig = CCBReader.load("Pig") as! Pig;
             pig.index = i;
             self.pigs.append(pig);
-            self.gamePhysicsNode.addChild(pig);
+            self.pigsLayer.addChild(pig);
             random = (CGFloat(CCRANDOM_0_1()) * self.usableScreenHeight) + 2 * self.groundHeight;
             //random = (CGFloat(arc4random_uniform(UInt32(self.usableScreenSize)))) + self.groundHeight;
             pig.position = CGPoint(x: (self.distanceBetweenObstacles / 2) + self.nextObstaclePosition + (CGFloat(i) * self.distanceBetweenObstacles), y: random);
@@ -148,7 +143,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         self.totalPigs = CGFloat(self.pigs.count);
         self.minimumObstaclePositionX = -self.obstacles[0].contentSize.width;
         
-        for i in 0..<3 {
+        for i in 0..<4 {
             self.spawnNewObstacle();
         }
         
@@ -183,23 +178,35 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             let impulse = -18000.0 * delta;
             self.bird.physicsBody.applyAngularImpulse(CGFloat(impulse));
         }*/
+        
         if (self.somethingNeedsRepositioning) {
+            
             if (self.groundBlockNeedsRepositioning) {
                 self.spawnNewGroundBlock();
                 self.groundBlockNeedsRepositioning = false;
             }
+            
             if (self.pigNeedsRepositioning) {
-                self.spawnNewPig();
+                for i in 0..<self.pigs.count {
+                    if (self.convertToNodeSpace(self.pigsLayer.convertToWorldSpace(self.pigs[i].position)).x <= self.minusPigWidth) {
+                        self.spawnNewPig();
+                    }
+                }
                 self.pigNeedsRepositioning = false;
             }
+        
             if (self.obstacleNeedsRepositioning) {
                 self.spawnNewObstacle();
                 self.obstacleNeedsRepositioning = false;
             }
+        
             if (self.backgroundNeedsRepositioning) {
-                self.spawnNewBackground();
+                for i in 0..<self.backgrounds.count {
+                    if (self.convertToNodeSpace(self.backgroundLayer.convertToWorldSpace(self.backgrounds[i].position)).x <= self.minusBackgroundWidth) {
+                        self.spawnNewBackground();
+                    }
+                }
                 self.backgroundNeedsRepositioning = false;
-                println("background repositioned");
             }
             self.somethingNeedsRepositioning = false;
         }
@@ -213,29 +220,32 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     
     // listens for collisions between bird and goal, located between two pipes. A lot of checks will be ran here to save processing power from doing all of them on the update method, which would execute at every new frame rendered.
     func ccPhysicsCollisionBegin(pair: CCPhysicsCollisionPair!, bird: CCNode!, goal: Goal!) -> Bool {
+        
         self.score += 1000;
+        
         println("\(self.score)");
-        if (self.convertToNodeSpace(self.gamePhysicsNode.convertToWorldSpace(self.groundBlocks[self.groundBlockIndex].position)).x <= self.minimumGroundPositionX) {
+        
+        if (self.convertToNodeSpace(self.groundBlocksLayer.convertToWorldSpace(self.groundBlocks[self.groundBlockIndex].position)).x <= self.minimumGroundPositionX) {
             self.somethingNeedsRepositioning = true;
             self.groundBlockNeedsRepositioning = true;
         }
         
-        if (self.convertToNodeSpace(self.gamePhysicsNode.convertToWorldSpace(self.obstacles[self.activeObstacleIndex].position)).x <= self.minimumObstaclePositionX) {
+        if (self.convertToNodeSpace(self.obstaclesLayer.convertToWorldSpace(self.obstacles[self.activeObstacleIndex].position)).x <= self.minimumObstaclePositionX) {
             self.somethingNeedsRepositioning = true;
             self.obstacleNeedsRepositioning = true;
         }
         
-        if (self.convertToNodeSpace(self.gamePhysicsNode.convertToWorldSpace(self.pigs[self.offscreenPigIndex].position)).x <= self.minusPigWidth) {
+        if (self.convertToNodeSpace(self.pigsLayer.convertToWorldSpace(self.pigs[self.offscreenPigIndex].position)).x <= self.minusPigWidth) {
             self.somethingNeedsRepositioning = true;
             self.pigNeedsRepositioning = true;
             println("pig will be repositioned");
         }
         
-        /*if (self.convertToNodeSpace(self.gamePhysicsNode.convertToWorldSpace(self.backgrounds[self.backgroundIndex].position)).x <= self.minusBackgroundWidth) {
+        if (self.convertToNodeSpace(self.backgroundLayer.convertToWorldSpace(self.backgrounds[self.backgroundIndex].position)).x <= self.minusBackgroundWidth) {
             self.somethingNeedsRepositioning = true;
             self.backgroundNeedsRepositioning = true;
             println("background will be repositioned");
-        }*/
+        }
         
         return true;
     }
@@ -256,6 +266,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     func ccPhysicsCollisionBegin(pair: CCPhysicsCollisionPair!, bird: CCNode!, backgroundSensor: CCNode!) -> Bool {
         self.somethingNeedsRepositioning = true;
         self.backgroundNeedsRepositioning = true;
+        println("BGBGBG");
         return true;
     }
     
@@ -281,7 +292,8 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     
     // swaps background frames to give impression of continuous horizontal movement.
     func spawnNewBackground() {
-        self.backgrounds[self.backgroundIndex].position.x = self.backgrounds[self.backgroundIndex].position.x + CGFloat(self.backgrounds.count + 1) * (self.backgrounds[self.backgroundIndex].backgroundWidth); // will actually add two times its own width to its X position.
+        //self.backgrounds[self.backgroundIndex].position.x = self.backgrounds[self.backgroundIndex].position.x + CGFloat(self.backgrounds.count) * (self.backgrounds[self.backgroundIndex].backgroundWidth); // will actually add two times its own width to its X position.
+        self.backgrounds[self.backgroundIndex].position.x += CGFloat(self.backgrounds.count) * -(self.minusBackgroundWidth);
         self.backgroundIndex = (self.backgroundIndex + 1) % self.backgrounds.count;
     }
     
