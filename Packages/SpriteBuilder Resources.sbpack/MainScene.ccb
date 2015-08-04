@@ -10,7 +10,7 @@
 		<false/>
 	</dict>
 	<key>UUID</key>
-	<integer>41</integer>
+	<integer>42</integer>
 	<key>centeredOrigin</key>
 	<false/>
 	<key>currentResolution</key>
@@ -523,7 +523,7 @@
 				<key>customClass</key>
 				<string></string>
 				<key>displayName</key>
-				<string>CCLabelBMFont</string>
+				<string>pointsAdded</string>
 				<key>memberVarAssignmentName</key>
 				<string>addedPointsLabel</string>
 				<key>memberVarAssignmentType</key>
@@ -617,8 +617,6 @@
 						</array>
 					</dict>
 				</array>
-				<key>selected</key>
-				<true/>
 			</dict>
 			<dict>
 				<key>UUID</key>
@@ -630,9 +628,9 @@
 				<key>customClass</key>
 				<string></string>
 				<key>displayName</key>
-				<string>CCLabelBMFont</string>
+				<string>scoreText</string>
 				<key>memberVarAssignmentName</key>
-				<string></string>
+				<string>scoreText</string>
 				<key>memberVarAssignmentType</key>
 				<integer>1</integer>
 				<key>properties</key>
@@ -652,10 +650,10 @@
 						<string>Position</string>
 						<key>value</key>
 						<array>
-							<real>274.5</real>
+							<real>0.28999999165534973</real>
 							<real>0.0</real>
+							<integer>1</integer>
 							<integer>2</integer>
-							<integer>0</integer>
 							<integer>2</integer>
 						</array>
 					</dict>
@@ -666,7 +664,7 @@
 						<string>Point</string>
 						<key>value</key>
 						<array>
-							<real>0.5</real>
+							<real>1</real>
 							<real>1</real>
 						</array>
 					</dict>
@@ -716,10 +714,12 @@
 						</array>
 					</dict>
 				</array>
+				<key>selected</key>
+				<true/>
 			</dict>
 			<dict>
 				<key>UUID</key>
-				<integer>40</integer>
+				<integer>41</integer>
 				<key>baseClass</key>
 				<string>CCLabelBMFont</string>
 				<key>children</key>
@@ -727,7 +727,7 @@
 				<key>customClass</key>
 				<string></string>
 				<key>displayName</key>
-				<string>CCLabelBMFont</string>
+				<string>scoreLabel</string>
 				<key>memberVarAssignmentName</key>
 				<string>scoreLabel</string>
 				<key>memberVarAssignmentType</key>
@@ -749,9 +749,9 @@
 						<string>Position</string>
 						<key>value</key>
 						<array>
-							<real>101</real>
-							<real>568</real>
-							<integer>0</integer>
+							<real>0.0</real>
+							<real>22</real>
+							<integer>2</integer>
 							<integer>0</integer>
 							<integer>0</integer>
 						</array>
@@ -763,8 +763,8 @@
 						<string>Point</string>
 						<key>value</key>
 						<array>
-							<real>0.5</real>
 							<real>1</real>
+							<real>0.5</real>
 						</array>
 					</dict>
 					<dict>

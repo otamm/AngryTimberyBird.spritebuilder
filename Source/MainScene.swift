@@ -11,8 +11,6 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     weak var obstaclesLayer:CCNode!;
     // layer inside gamePhysicsNode to add ground blocks to and guarantee they'll be affected by physics.
     weak var groundBlocksLayer:CCNode!;
-    // restart button visible once game over is triggered.
-    weak var restartButton:CCButton!;
     // gets first background image (will be chained to itself)
     /*weak var background1:CCNode!;
     // gets second background image which is exactly like the first one
@@ -27,6 +25,8 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     weak var scoreLabel:CCLabelBMFont!;
     // added points label
     weak var addedPointsLabel:CCLabelBMFont!;
+    // just a label with the text 'score'. Invisible once game is over.
+    weak var scoreText:CCLabelBMFont!;
     
     /* custom variables */
     
@@ -90,6 +90,8 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     var backgrounds:[Background] = [];
     // checks whether or not this is the first load and display extra intro animations if it is.
     var isFirstLoad:Bool = true;
+    // checks wheter or not game is over.
+    var isGameOver:Bool = false;
     
     /* cocos2d methods */
     
@@ -291,12 +293,16 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     /* iOS methods */
     
     override func touchBegan(touch: CCTouch!, withEvent event: CCTouchEvent!) {
-        // makes bird go up
-        self.bird.physicsBody.applyImpulse(ccp(0, 300));
-        // makes bird rotate up
-        //self.bird.physicsBody.applyAngularImpulse(10000);
-        // resets timer
-        self.sinceTouch = 0;
+        if !(self.isGameOver) {
+            // makes bird go up
+            self.bird.physicsBody.applyImpulse(ccp(0, 300));
+            // makes bird rotate up
+            //self.bird.physicsBody.applyAngularImpulse(10000);
+            // resets timer
+            self.sinceTouch = 0;
+        } else {
+            self.displayGameOver();
+        }
     }
     
     /* custom methods */
@@ -345,9 +351,6 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     }
     
     func triggerGameOver() {
-        self.userInteractionEnabled = false;
-        //self.restartButton.userInteractionEnabled = true;
-        //self.restartButton.visible = true;
         self.bird.die();
         self.birdSpeedX = 0;
         self.bird.rotation = 90;
@@ -358,6 +361,8 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             self.pigs[p].physicsBody.collisionMask = [];
         }
         
+        self.isGameOver = true;
+        self.schedule("displayGameOver", interval: 70.0 / 60.0);
         
         // just in case
         self.bird.stopAllActions();
@@ -366,23 +371,30 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         let moveBack = CCActionEaseBounceOut(action: move.reverse());
         let shakeSequence = CCActionSequence(array: [move, moveBack]);
         self.runAction(shakeSequence);
-        self.schedule("displayGameOver", interval: 30.0 / 60.0);
     }
     
     // displays how many points the last action added to score.
     func displayAddedPoints(points: Int) {
         self.addedPointsLabel.setString("+\(points)");
         self.addedPointsLabel.visible = true;
+        self.addedPointsLabel.runAction(CCActionMoveBy(duration: 20.0/60.0, position: CGPoint(x: 0, y: 100)));
         self.schedule("undisplayAddedPoints", interval: 20.0 / 60.0);
     }
     
     func undisplayAddedPoints() {
         self.addedPointsLabel.visible = false;
+        self.addedPointsLabel.position = CGPoint(x: self.addedPointsLabel.position.x, y: self.addedPointsLabel.position.y - 100);
         self.unschedule("undisplayAddedPoints");
     }
     
     func displayGameOver() {
         self.unschedule("displayGameOver");
+        // so bird won't move.
+        self.userInteractionEnabled = false;
+        // makes score labels invisible
+        self.scoreLabel.visible = false;
+        self.scoreText.visible = false;
+        
         var gameEndPopover = CCBReader.load("GameEnd") as! GameEnd;
         gameEndPopover.positionType = CCPositionType(xUnit: .Normalized, yUnit: .Normalized, corner: .BottomLeft);
         gameEndPopover.position = ccp(0.5, 0.5);
