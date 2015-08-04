@@ -57,7 +57,7 @@
 							<integer>7</integer>
 							<key>value</key>
 							<array>
-								<string>iPad/pig/pigWingUp.png</string>
+								<string>iPad/pigs/green/pigWingUp.png</string>
 								<string>Use regular file</string>
 							</array>
 						</dict>
@@ -75,7 +75,7 @@
 							<integer>7</integer>
 							<key>value</key>
 							<array>
-								<string>iPad/pig/pigWingDown.png</string>
+								<string>iPad/pigs/green/pigWingDown.png</string>
 								<string>Use regular file</string>
 							</array>
 						</dict>
@@ -146,7 +146,7 @@
 							<integer>7</integer>
 							<key>value</key>
 							<array>
-								<string>iPad/pig/deadPig.png</string>
+								<string>iPad/pigs/green/deadPig.png</string>
 								<string>Use regular file</string>
 							</array>
 						</dict>
@@ -164,7 +164,7 @@
 							<integer>7</integer>
 							<key>value</key>
 							<array>
-								<string>iPad/pig/deadPigUp.png</string>
+								<string>iPad/pigs/green/deadPigUp.png</string>
 								<string>Use regular file</string>
 							</array>
 						</dict>
@@ -346,7 +346,7 @@
 				<key>value</key>
 				<array>
 					<string></string>
-					<string>iPad/pig/deadPigUp.png</string>
+					<string>iPad/pigs/green/deadPigUp.png</string>
 				</array>
 			</dict>
 			<dict>
@@ -368,7 +368,7 @@
 				<key>type</key>
 				<string>Float</string>
 				<key>value</key>
-				<real>1</real>
+				<real>0.5</real>
 			</dict>
 			<dict>
 				<key>name</key>
@@ -380,7 +380,7 @@
 					<real>1</real>
 					<real>1</real>
 					<real>1</real>
-					<real>1</real>
+					<real>0.5</real>
 				</array>
 			</dict>
 			<dict>
@@ -451,7 +451,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.0</real>
+			<real>0.10000000149011612</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
@@ -487,7 +487,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.0</real>
+			<real>0.10000000149011612</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>

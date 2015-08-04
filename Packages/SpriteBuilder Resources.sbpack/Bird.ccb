@@ -179,7 +179,7 @@
 						<key>value</key>
 						<array>
 							<string></string>
-							<string>iPad/bird/wing4.png</string>
+							<string>iPad/birds/Red/wing4.png</string>
 						</array>
 					</dict>
 					<dict>
@@ -358,7 +358,7 @@
 						<key>value</key>
 						<array>
 							<string></string>
-							<string>iPad/bird/deadEyeBird4.png</string>
+							<string>iPad/birds/Red/deadEyeBird4.png</string>
 						</array>
 					</dict>
 					<dict>
@@ -394,8 +394,6 @@
 						<array/>
 					</dict>
 				</array>
-				<key>selected</key>
-				<true/>
 				<key>seqExpanded</key>
 				<true/>
 			</dict>
@@ -539,7 +537,7 @@
 						<key>value</key>
 						<array>
 							<string></string>
-							<string>iPad/bird/downWing4.png</string>
+							<string>iPad/birds/Red/downWing4.png</string>
 						</array>
 					</dict>
 					<dict>
@@ -575,6 +573,8 @@
 						<array/>
 					</dict>
 				</array>
+				<key>selected</key>
+				<true/>
 				<key>seqExpanded</key>
 				<true/>
 			</dict>
@@ -677,7 +677,7 @@
 				<key>value</key>
 				<array>
 					<string></string>
-					<string>iPad/bird/birdBody4.png</string>
+					<string>iPad/birds/Red/birdBody4.png</string>
 				</array>
 			</dict>
 			<dict>

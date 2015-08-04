@@ -23,7 +23,10 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     weak var backgroundLayer:CCNode!;
     // layer which contains pigs
     weak var pigsLayer:CCNode!;
-    
+    // total score label
+    weak var scoreLabel:CCLabelBMFont!;
+    // added points label
+    weak var addedPointsLabel:CCLabelBMFont!;
     
     /* custom variables */
     
@@ -85,6 +88,8 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     var backgroundIndex:Int = 0;
     // array to reference background images. Initially empty.
     var backgrounds:[Background] = [];
+    // checks whether or not this is the first load and display extra intro animations if it is.
+    var isFirstLoad:Bool = true;
     
     /* cocos2d methods */
     
@@ -213,17 +218,18 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     }
     
     // listens for collision between bird and any 'level' object.
-    func ccPhysicsCollisionBegin(pair: CCPhysicsCollisionPair!, bird: CCNode!, level: CCNode!) -> Bool {
+    func ccPhysicsCollisionBegin(pair: CCPhysicsCollisionPair!, bird: CCNode!, level: CCNode!) -> ObjCBool {
         self.triggerGameOver();
         return true;
     }
     
     // listens for collisions between bird and goal, located between two pipes. A lot of checks will be ran here to save processing power from doing all of them on the update method, which would execute at every new frame rendered.
-    func ccPhysicsCollisionBegin(pair: CCPhysicsCollisionPair!, bird: CCNode!, goal: Goal!) -> Bool {
+    func ccPhysicsCollisionBegin(pair: CCPhysicsCollisionPair!, bird: CCNode!, goal: Goal!) -> ObjCBool {
         
         self.score += 1000;
         
-        println("\(self.score)");
+        self.scoreLabel.setString("\(self.score)");
+        self.displayAddedPoints(1000);
         
         if (self.convertToNodeSpace(self.groundBlocksLayer.convertToWorldSpace(self.groundBlocks[self.groundBlockIndex].position)).x <= self.minimumGroundPositionX) {
             self.somethingNeedsRepositioning = true;
@@ -251,19 +257,24 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     }
     
     // listens for collision between bird and any 'level' object.
-    func ccPhysicsCollisionBegin(pair: CCPhysicsCollisionPair!, bird: CCNode!, pig: Pig!) -> Bool {
+    func ccPhysicsCollisionBegin(pair: CCPhysicsCollisionPair!, bird: CCNode!, pig: Pig!) -> ObjCBool {
         self.pigs[pig.index].die();
         if (self.lastPoppedPig != pig.index - 1) {
             self.scoreMultiplier = 0;
         }
         self.lastPoppedPig = pig.index;
         self.scoreMultiplier++;
-        self.score = self.score + (1000 * self.scoreMultiplier);
-        println("\(self.score)");
+        
+        let addToScore = 500 * self.scoreMultiplier;
+        self.displayAddedPoints(addToScore);
+        self.score = self.score + (addToScore);
+        self.scoreLabel.setString("\(self.score)");
+        
+        //println("\(self.score)");
         return true;
     }
     
-    func ccPhysicsCollisionBegin(pair: CCPhysicsCollisionPair!, bird: CCNode!, backgroundSensor: CCNode!) -> Bool {
+    func ccPhysicsCollisionBegin(pair: CCPhysicsCollisionPair!, bird: CCNode!, backgroundSensor: CCNode!) -> ObjCBool {
         self.somethingNeedsRepositioning = true;
         self.backgroundNeedsRepositioning = true;
         println("BGBGBG");
@@ -320,7 +331,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             randomX = -randomX;
         }
         // assigns random position to pig. X axis is half the distance between obstacles plus or minus up to one third the distance between obstacles. Y axis is a random position between the ground and the full screen height.
-        self.pigs[self.offscreenPigIndex].position = self.convertToWorldSpace(self.gamePhysicsNode.convertToNodeSpace(CGPoint(x: (self.distanceBetweenObstacles / 2) + self.nextObstaclePosition + (self.totalPigs * self.distanceBetweenObstacles) + randomX,y: randomY)));
+        self.pigs[self.offscreenPigIndex].position = self.convertToWorldSpace(self.pigsLayer.convertToNodeSpace(CGPoint(x: (self.distanceBetweenObstacles / 2) + self.nextObstaclePosition + (self.totalPigs * self.distanceBetweenObstacles) + randomX,y: randomY)));
         println("\(self.pigs[self.offscreenPigIndex].position)");
         // if last pig to go offscreen was popped, revive it before repositioning. Else, set score multiplier to 0.
         if (self.pigs[self.offscreenPigIndex].isPopped) {
@@ -335,8 +346,8 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     
     func triggerGameOver() {
         self.userInteractionEnabled = false;
-        self.restartButton.userInteractionEnabled = true;
-        self.restartButton.visible = true;
+        //self.restartButton.userInteractionEnabled = true;
+        //self.restartButton.visible = true;
         self.bird.die();
         self.birdSpeedX = 0;
         self.bird.rotation = 90;
@@ -355,5 +366,28 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         let moveBack = CCActionEaseBounceOut(action: move.reverse());
         let shakeSequence = CCActionSequence(array: [move, moveBack]);
         self.runAction(shakeSequence);
+        self.schedule("displayGameOver", interval: 30.0 / 60.0);
+    }
+    
+    // displays how many points the last action added to score.
+    func displayAddedPoints(points: Int) {
+        self.addedPointsLabel.setString("+\(points)");
+        self.addedPointsLabel.visible = true;
+        self.schedule("undisplayAddedPoints", interval: 20.0 / 60.0);
+    }
+    
+    func undisplayAddedPoints() {
+        self.addedPointsLabel.visible = false;
+        self.unschedule("undisplayAddedPoints");
+    }
+    
+    func displayGameOver() {
+        self.unschedule("displayGameOver");
+        var gameEndPopover = CCBReader.load("GameEnd") as! GameEnd;
+        gameEndPopover.positionType = CCPositionType(xUnit: .Normalized, yUnit: .Normalized, corner: .BottomLeft);
+        gameEndPopover.position = ccp(0.5, 0.5);
+        gameEndPopover.zOrder = Int.max;
+        gameEndPopover.isHighscore(self.score);
+        self.addChild(gameEndPopover);
     }
 }
