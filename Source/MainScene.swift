@@ -70,7 +70,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     var pigs:[Pig] = [];
     // stores pig width to check when pig has gone offscreen
     var minusPigWidth:CGFloat!;
-    // checks index of an eventually non-popped pig that might have gone offscreen
+    // checks index of an eventually non-popped pig that might have gone offscreen. Checks one index before the last pig offscreen, so index starts at 1 and not 0.
     var offscreenPigIndex:Int = 0;
     // checks index of last popped pig
     var lastPoppedPig:Int = 0;
@@ -92,6 +92,10 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     var isFirstLoad:Bool = true;
     // checks wheter or not game is over.
     var isGameOver:Bool = false;
+    // stores obstacle width to control pig position relative to it.
+    var obstacleWidth:CGFloat!;
+    // stores last pig horizontal position.
+    var lastPigPosition:CGFloat!;
     
     /* cocos2d methods */
     
@@ -122,6 +126,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             self.groundBlocks[i].position = CGPoint(x: groundBlock.contentSize.width * CGFloat(i), y: 0);
         }
         
+        self.obstacleWidth = self.obstacles[0].contentSize.width;
         self.minusBackgroundWidth = -self.backgrounds[0].contentSize.width;
         
         self.groundHeight = self.groundBlocks[0].contentSize.height;
@@ -133,17 +138,29 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         
         var pig:Pig;
         // will be used to position first three pigs along Y axis
-        var random:CGFloat;
+        var randomX:CGFloat;
+        var randomY:CGFloat;
         
         for i in 0..<4 {
             pig = CCBReader.load("Pig") as! Pig;
             pig.index = i;
             self.pigs.append(pig);
-            self.pigsLayer.addChild(pig);
-            random = (CGFloat(CCRANDOM_0_1()) * self.usableScreenHeight) + 2 * self.groundHeight;
+            //self.pigsLayer.addChild(pig);
+            self.obstaclesLayer.addChild(pig);
+            randomY = (CGFloat(CCRANDOM_0_1()) * self.usableScreenHeight) + 2 * self.groundHeight;
+            randomX = (self.distanceBetweenObstacles / 4) * CGFloat(CCRANDOM_0_1());
+            
+            if (CCRANDOM_0_1() > 0.5) {
+                randomX = -randomX;
+            }
+            
+            self.pigs[i].distanceFromCenter = randomX;
             //random = (CGFloat(arc4random_uniform(UInt32(self.usableScreenSize)))) + self.groundHeight;
-            pig.position = CGPoint(x: (self.distanceBetweenObstacles / 2) + self.nextObstaclePosition + (CGFloat(i) * self.distanceBetweenObstacles), y: random);
+            pig.position = CGPoint(x: (self.distanceBetweenObstacles / 2) + self.nextObstaclePosition + (CGFloat(i) * self.distanceBetweenObstacles) + randomX, y: randomY);
         }
+        self.lastPigPosition = self.pigs[self.pigs.count - 1].position.x;
+        
+        
         self.minusPigWidth = -(self.pigs[0].contentSize.width);
         
         self.totalObstacles = self.obstacles.count;
@@ -163,6 +180,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     override func update(delta: CCTime) {
         // clampf tests the specific float value and if it is bigger than a set maximum, the value gets assigned to that maximum (which is 200 in this case). First argument is value to test, second argument is minimum value allowed and third argument is the maximum value allowed.
         // setting the second argument (the minimum) to -Float(CGFloat.max) would assign minimum value as the smallest float possible, which means that the downwards velocity will not get affected.
+        
         let velocityY = clampf(Float(self.bird.physicsBody.velocity.y), -200, 300);
         self.bird.physicsBody.velocity = ccp(0, CGFloat(velocityY));
         
@@ -194,11 +212,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             }
             
             if (self.pigNeedsRepositioning) {
-                for i in 0..<self.pigs.count {
-                    if (self.convertToNodeSpace(self.pigsLayer.convertToWorldSpace(self.pigs[i].position)).x <= self.minusPigWidth) {
-                        self.spawnNewPig();
-                    }
-                }
+                self.spawnNewPig();
                 self.pigNeedsRepositioning = false;
             }
         
@@ -217,6 +231,12 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             }
             self.somethingNeedsRepositioning = false;
         }
+        
+        /*if (self.convertToNodeSpace(self.obstaclesLayer.convertToWorldSpace(self.pigs[self.offscreenPigIndex].position)).x <= self.minusPigWidth) {
+            
+            self.spawnNewPig();
+            
+        }*/
     }
     
     // listens for collision between bird and any 'level' object.
@@ -228,10 +248,10 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     // listens for collisions between bird and goal, located between two pipes. A lot of checks will be ran here to save processing power from doing all of them on the update method, which would execute at every new frame rendered.
     func ccPhysicsCollisionBegin(pair: CCPhysicsCollisionPair!, bird: CCNode!, goal: Goal!) -> ObjCBool {
         
-        self.score += 1000;
+        self.score += 100;
         
         self.scoreLabel.setString("\(self.score)");
-        self.displayAddedPoints(1000);
+        self.displayAddedPoints(100);
         
         if (self.convertToNodeSpace(self.groundBlocksLayer.convertToWorldSpace(self.groundBlocks[self.groundBlockIndex].position)).x <= self.minimumGroundPositionX) {
             self.somethingNeedsRepositioning = true;
@@ -243,16 +263,15 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             self.obstacleNeedsRepositioning = true;
         }
         
-        if (self.convertToNodeSpace(self.pigsLayer.convertToWorldSpace(self.pigs[self.offscreenPigIndex].position)).x <= self.minusPigWidth) {
+        if (self.convertToNodeSpace(self.obstaclesLayer.convertToWorldSpace(self.pigs[self.offscreenPigIndex].position)).x <= self.minusPigWidth) {
             self.somethingNeedsRepositioning = true;
             self.pigNeedsRepositioning = true;
-            println("pig will be repositioned");
+            //println("pig will be repositioned");
         }
         
         if (self.convertToNodeSpace(self.backgroundLayer.convertToWorldSpace(self.backgrounds[self.backgroundIndex].position)).x <= self.minusBackgroundWidth) {
             self.somethingNeedsRepositioning = true;
             self.backgroundNeedsRepositioning = true;
-            println("background will be repositioned");
         }
         
         return true;
@@ -261,13 +280,13 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     // listens for collision between bird and any 'level' object.
     func ccPhysicsCollisionBegin(pair: CCPhysicsCollisionPair!, bird: CCNode!, pig: Pig!) -> ObjCBool {
         self.pigs[pig.index].die();
-        if (self.lastPoppedPig != pig.index - 1) {
+        if (self.lastPoppedPig != (pig.index + self.pigs.count - 1) % self.pigs.count) {
             self.scoreMultiplier = 0;
         }
         self.lastPoppedPig = pig.index;
         self.scoreMultiplier++;
         
-        let addToScore = 500 * self.scoreMultiplier;
+        let addToScore = 50 * self.scoreMultiplier;
         self.displayAddedPoints(addToScore);
         self.score = self.score + (addToScore);
         self.scoreLabel.setString("\(self.score)");
@@ -279,7 +298,6 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     func ccPhysicsCollisionBegin(pair: CCPhysicsCollisionPair!, bird: CCNode!, backgroundSensor: CCNode!) -> ObjCBool {
         self.somethingNeedsRepositioning = true;
         self.backgroundNeedsRepositioning = true;
-        println("BGBGBG");
         return true;
     }
     
@@ -320,6 +338,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         self.obstacles[self.activeObstacleIndex].setupRandomPosition();
         self.nextObstaclePosition = self.nextObstaclePosition + self.distanceBetweenObstacles;
         self.activeObstacleIndex = (self.activeObstacleIndex + 1) % self.totalObstacles;
+        
     }
     
     // interchanges ground rendering
@@ -332,21 +351,28 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     // spawns pig at new location
     func spawnNewPig() {
         let randomY:CGFloat = (CGFloat(CCRANDOM_0_1()) * self.usableScreenHeight) + 2 * self.groundHeight;
-        var randomX:CGFloat = (CGFloat(CCRANDOM_0_1()) * self.distanceBetweenObstacles)/3;
+        var randomX:CGFloat = (CGFloat(CCRANDOM_0_1()) * (self.distanceBetweenObstacles - self.obstacleWidth)) / 4;
+    
         if (CCRANDOM_0_1() > 0.5) {
             randomX = -randomX;
         }
+        
+        self.pigs[self.offscreenPigIndex].distanceFromCenter = randomX;
+        
         // assigns random position to pig. X axis is half the distance between obstacles plus or minus up to one third the distance between obstacles. Y axis is a random position between the ground and the full screen height.
-        self.pigs[self.offscreenPigIndex].position = self.convertToWorldSpace(self.pigsLayer.convertToNodeSpace(CGPoint(x: (self.distanceBetweenObstacles / 2) + self.nextObstaclePosition + (self.totalPigs * self.distanceBetweenObstacles) + randomX,y: randomY)));
-        println("\(self.pigs[self.offscreenPigIndex].position)");
-        // if last pig to go offscreen was popped, revive it before repositioning. Else, set score multiplier to 0.
+        //self.pigs[self.offscreenPigIndex].position = CGPoint(x: self.lastPigPosition - self.pigs[(self.offscreenPigIndex + self.pigs.count - 1) % self.pigs.count].distanceFromCenter + (self.obstacleWidth + self.distanceBetweenObstacles / 2), y: randomY);
+        self.pigs[self.offscreenPigIndex].position = CGPoint(x: self.lastPigPosition - self.pigs[(self.offscreenPigIndex + self.pigs.count - 1) % self.pigs.count].distanceFromCenter + self.distanceBetweenObstacles, y: randomY);
+        
         if (self.pigs[self.offscreenPigIndex].isPopped) {
             self.pigs[self.offscreenPigIndex].revive();
         } else {
-            if (self.lastPoppedPig != self.offscreenPigIndex + 1) {
+            if (self.scoreMultiplier < 1) {
                 self.scoreMultiplier = 0;
             }
         }
+        
+        self.lastPigPosition = self.pigs[self.offscreenPigIndex].position.x;
+        println("AQW \(self.lastPigPosition)");
         self.offscreenPigIndex = (self.offscreenPigIndex + 1) % self.pigs.count;
     }
     
@@ -377,8 +403,9 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     func displayAddedPoints(points: Int) {
         self.addedPointsLabel.setString("+\(points)");
         self.addedPointsLabel.visible = true;
-        self.addedPointsLabel.runAction(CCActionMoveBy(duration: 20.0/60.0, position: CGPoint(x: 0, y: 100)));
         self.schedule("undisplayAddedPoints", interval: 20.0 / 60.0);
+        self.addedPointsLabel.runAction(CCActionMoveBy(duration: 20.0/60.0, position: CGPoint(x: 0, y: 100)));
+        //self.undisplayAddedPoints();
     }
     
     func undisplayAddedPoints() {
