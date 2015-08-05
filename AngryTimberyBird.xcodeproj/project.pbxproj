@@ -65,6 +65,7 @@
 		927F61BB196C771E000F43EF /* iPad-old.png in Resources */ = {isa = PBXBuildFile; fileRef = B71F5907188484E7003F4D28 /* iPad-old.png */; };
 		AA41D4211B710E5C00C4DC7D /* GameEnd.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA41D4201B710E5C00C4DC7D /* GameEnd.swift */; };
 		AA41D4251B710E8500C4DC7D /* GameCenterInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA41D4241B710E8500C4DC7D /* GameCenterInteractor.swift */; };
+		AA41D45D1B71BE0B00C4DC7D /* SharingHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA41D45C1B71BE0B00C4DC7D /* SharingHandler.swift */; };
 		AA525CE41B5F4AF90049BC4D /* Pig.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA525CE31B5F4AF90049BC4D /* Pig.swift */; };
 		AA525CE81B606AD40049BC4D /* Goal.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA525CE71B606AD40049BC4D /* Goal.swift */; };
 		AA525CEA1B60C73F0049BC4D /* Ground.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA525CE91B60C73F0049BC4D /* Ground.swift */; };
@@ -240,6 +241,7 @@
 		9C0BAE4EC2334EEAE64B0856 /* Pods-AngryTimberyBird iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AngryTimberyBird iOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-AngryTimberyBird iOS/Pods-AngryTimberyBird iOS.release.xcconfig"; sourceTree = "<group>"; };
 		AA41D4201B710E5C00C4DC7D /* GameEnd.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameEnd.swift; sourceTree = "<group>"; };
 		AA41D4241B710E8500C4DC7D /* GameCenterInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameCenterInteractor.swift; sourceTree = "<group>"; };
+		AA41D45C1B71BE0B00C4DC7D /* SharingHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharingHandler.swift; sourceTree = "<group>"; };
 		AA525CE31B5F4AF90049BC4D /* Pig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pig.swift; sourceTree = "<group>"; };
 		AA525CE71B606AD40049BC4D /* Goal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Goal.swift; sourceTree = "<group>"; };
 		AA525CE91B60C73F0049BC4D /* Ground.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ground.swift; sourceTree = "<group>"; };
@@ -531,6 +533,7 @@
 			children = (
 				7A40362019DDEF0D007B6E8F /* Platforms */,
 				7A046D7519E84C36004C4763 /* MainScene.swift */,
+				AA41D45C1B71BE0B00C4DC7D /* SharingHandler.swift */,
 				AA41D4201B710E5C00C4DC7D /* GameEnd.swift */,
 				AA41D4241B710E8500C4DC7D /* GameCenterInteractor.swift */,
 				AA67291F1B66C29A00F6734B /* Background.swift */,
@@ -1050,6 +1053,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA525CE41B5F4AF90049BC4D /* Pig.swift in Sources */,
+				AA41D45D1B71BE0B00C4DC7D /* SharingHandler.swift in Sources */,
 				B73789871807631A0076A88C /* main.m in Sources */,
 				7A046D7919E84ED5004C4763 /* MainScene.swift in Sources */,
 				AA41D4211B710E5C00C4DC7D /* GameEnd.swift in Sources */,

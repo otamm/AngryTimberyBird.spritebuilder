@@ -110,23 +110,11 @@ class GameEnd:CCNode, GKGameCenterControllerDelegate {
     }
     
     func facebook() {
-        // 1
-        if SLComposeViewController.isAvailableForServiceType(SLServiceTypeFacebook) {
-            // 2
-            var controller = SLComposeViewController(forServiceType: SLServiceTypeFacebook)
-            // 3
-            controller.setInitialText("Testing Posting to Facebook")
-            // 4
-            //self.presentViewController(controller, animated:true, completion:nil)
-        } else {
-            println("No facebook account on device");
-            var alert = UIAlertController(title: "Accounts", message: "Please login to a Facebook account to share.", preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
-        }
+        SharingHandler.sharedInstance.postToFacebook(postWithScreenshot: true);
     }
     
     func twitter() {
-        self.shareButtonTapped();
+        SharingHandler.sharedInstance.postToTwitter(stringToPost: "HELLO DERR", postWithScreenshot: true);
     }
     
     /* GameKit methods */
