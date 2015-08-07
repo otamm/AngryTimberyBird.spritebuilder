@@ -160,7 +160,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             
             self.pigs[i].distanceFromCenter = randomX;
             //random = (CGFloat(arc4random_uniform(UInt32(self.usableScreenSize)))) + self.groundHeight;
-            pig.position = CGPoint(x: (self.obstacleWidth + self.distanceBetweenObstacles / 2) + self.nextObstaclePosition + (CGFloat(i) * self.distanceBetweenObstacles) + randomX, y: randomY);
+            pig.position = CGPoint(x: ((self.distanceBetweenObstacles - self.obstacleWidth) / 2) + self.nextObstaclePosition + (CGFloat(i) * self.distanceBetweenObstacles) + randomX, y: randomY);
         }
         self.lastPigPosition = self.pigs[self.pigs.count - 1].position.x;
         
