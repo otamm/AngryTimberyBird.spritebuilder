@@ -24,7 +24,9 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     // total score label
     weak var scoreLabel:CCLabelBMFont!;
     // added points label
-    weak var addedPointsLabel:CCLabelBMFont!;
+    weak var addedPointsLabel1:CCLabelBMFont!;
+    // second added points label
+    weak var addedPointsLabel2:CCLabelBMFont!;
     // just a label with the text 'score'. Invisible once game is over.
     weak var scoreText:CCLabelBMFont!;
     
@@ -96,6 +98,8 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     var obstacleWidth:CGFloat!;
     // stores last pig horizontal position.
     var lastPigPosition:CGFloat!;
+    // stores number for added points label
+    var addedPointsNum:Int = 0;
     
     /* cocos2d methods */
     
@@ -112,7 +116,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             background = CCBReader.load("Background") as! Background;
             self.backgroundLayer.addChild(background);
             self.backgrounds.append(background);
-            self.backgrounds[i].position = CGPoint(x: background.contentSize.width * CGFloat(i), y: 0);
+            self.backgrounds[i].position = CGPoint(x: background.contentSize.width * CGFloat(i) - 4, y: 0);
             
             // add obstacles, which will be spawned later.
             obstacle = CCBReader.load("Obstacle") as! Obstacle;
@@ -123,7 +127,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             groundBlock = CCBReader.load("Ground") as! Ground;
             self.groundBlocks.append(groundBlock);
             self.groundBlocksLayer.addChild(self.groundBlocks[i]);
-            self.groundBlocks[i].position = CGPoint(x: groundBlock.contentSize.width * CGFloat(i), y: 0);
+            self.groundBlocks[i].position = CGPoint(x: groundBlock.contentSize.width * CGFloat(i) - 4, y: 0);
         }
         
         self.obstacleWidth = self.obstacles[0].contentSize.width;
@@ -148,7 +152,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             //self.pigsLayer.addChild(pig);
             self.obstaclesLayer.addChild(pig);
             randomY = (CGFloat(CCRANDOM_0_1()) * self.usableScreenHeight) + 2 * self.groundHeight;
-            randomX = (self.distanceBetweenObstacles / 4) * CGFloat(CCRANDOM_0_1());
+            randomX = ((self.distanceBetweenObstacles - self.obstacleWidth) / 4) * CGFloat(CCRANDOM_0_1());
             
             if (CCRANDOM_0_1() > 0.5) {
                 randomX = -randomX;
@@ -156,7 +160,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             
             self.pigs[i].distanceFromCenter = randomX;
             //random = (CGFloat(arc4random_uniform(UInt32(self.usableScreenSize)))) + self.groundHeight;
-            pig.position = CGPoint(x: (self.distanceBetweenObstacles / 2) + self.nextObstaclePosition + (CGFloat(i) * self.distanceBetweenObstacles) + randomX, y: randomY);
+            pig.position = CGPoint(x: (self.obstacleWidth + self.distanceBetweenObstacles / 2) + self.nextObstaclePosition + (CGFloat(i) * self.distanceBetweenObstacles) + randomX, y: randomY);
         }
         self.lastPigPosition = self.pigs[self.pigs.count - 1].position.x;
         
@@ -401,16 +405,28 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     
     // displays how many points the last action added to score.
     func displayAddedPoints(points: Int) {
-        self.addedPointsLabel.setString("+\(points)");
-        self.addedPointsLabel.visible = true;
+        if (self.addedPointsNum == 0) {
+            self.addedPointsLabel1.setString("+\(points)");
+            self.addedPointsLabel1.visible = true;
+            self.addedPointsLabel1.position = self.bird.position;
+            self.addedPointsLabel1.runAction(CCActionMoveBy(duration: 20.0/60.0, position: CGPoint(x: 0, y: 100)));
+        } else {
+            self.addedPointsLabel2.setString("+\(points)");
+            self.addedPointsLabel2.visible = true;
+            self.addedPointsLabel2.position = self.bird.position;
+            self.addedPointsLabel2.runAction(CCActionMoveBy(duration: 20.0/60.0, position: CGPoint(x: 0, y: 100)));
+        }
         self.schedule("undisplayAddedPoints", interval: 20.0 / 60.0);
-        self.addedPointsLabel.runAction(CCActionMoveBy(duration: 20.0/60.0, position: CGPoint(x: 0, y: 100)));
         //self.undisplayAddedPoints();
     }
     
     func undisplayAddedPoints() {
-        self.addedPointsLabel.visible = false;
-        self.addedPointsLabel.position = CGPoint(x: self.addedPointsLabel.position.x, y: self.addedPointsLabel.position.y - 100);
+        if (self.addedPointsNum == 0) {
+            self.addedPointsLabel1.visible = false;
+        } else {
+            self.addedPointsLabel2.visible = false;
+        }
+        self.addedPointsNum = (self.addedPointsNum + 1) % 2;
         self.unschedule("undisplayAddedPoints");
     }
     

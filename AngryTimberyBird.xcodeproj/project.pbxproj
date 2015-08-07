@@ -66,6 +66,7 @@
 		AA41D4211B710E5C00C4DC7D /* GameEnd.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA41D4201B710E5C00C4DC7D /* GameEnd.swift */; };
 		AA41D4251B710E8500C4DC7D /* GameCenterInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA41D4241B710E8500C4DC7D /* GameCenterInteractor.swift */; };
 		AA41D45D1B71BE0B00C4DC7D /* SharingHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA41D45C1B71BE0B00C4DC7D /* SharingHandler.swift */; };
+		AA41D4611B71C21F00C4DC7D /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AA41D4601B71C21F00C4DC7D /* iAd.framework */; };
 		AA525CE41B5F4AF90049BC4D /* Pig.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA525CE31B5F4AF90049BC4D /* Pig.swift */; };
 		AA525CE81B606AD40049BC4D /* Goal.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA525CE71B606AD40049BC4D /* Goal.swift */; };
 		AA525CEA1B60C73F0049BC4D /* Ground.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA525CE91B60C73F0049BC4D /* Ground.swift */; };
@@ -242,6 +243,7 @@
 		AA41D4201B710E5C00C4DC7D /* GameEnd.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameEnd.swift; sourceTree = "<group>"; };
 		AA41D4241B710E8500C4DC7D /* GameCenterInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameCenterInteractor.swift; sourceTree = "<group>"; };
 		AA41D45C1B71BE0B00C4DC7D /* SharingHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SharingHandler.swift; sourceTree = "<group>"; };
+		AA41D4601B71C21F00C4DC7D /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
 		AA525CE31B5F4AF90049BC4D /* Pig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pig.swift; sourceTree = "<group>"; };
 		AA525CE71B606AD40049BC4D /* Goal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Goal.swift; sourceTree = "<group>"; };
 		AA525CE91B60C73F0049BC4D /* Ground.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ground.swift; sourceTree = "<group>"; };
@@ -350,6 +352,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA41D4611B71C21F00C4DC7D /* iAd.framework in Frameworks */,
 				7A97911819E631CD001FFC4D /* libcocos2d.a in Frameworks */,
 				8392007A18EE8E3300B6C429 /* GLKit.framework in Frameworks */,
 				B77F1B3217B978D7009739AE /* QuartzCore.framework in Frameworks */,
@@ -612,6 +615,7 @@
 		B77F1B3017B978D7009739AE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				AA41D4601B71C21F00C4DC7D /* iAd.framework */,
 				BC5399D31A44DCC90063F482 /* AndroidKit.framework */,
 				BC5399D41A44DCC90063F482 /* CoreJava.framework */,
 				BC5399D51A44DCC90063F482 /* GLActivityKit.framework */,
