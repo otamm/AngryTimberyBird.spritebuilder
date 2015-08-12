@@ -194,7 +194,7 @@
 								<string>Position</string>
 								<key>value</key>
 								<array>
-									<real>0.39166668057441711</real>
+									<real>0.47499999403953552</real>
 									<real>436</real>
 									<integer>0</integer>
 									<integer>2</integer>
@@ -258,6 +258,8 @@
 								</array>
 							</dict>
 						</array>
+						<key>selected</key>
+						<true/>
 					</dict>
 					<dict>
 						<key>UUID</key>
@@ -291,7 +293,7 @@
 								<string>Position</string>
 								<key>value</key>
 								<array>
-									<real>0.31833332777023315</real>
+									<real>0.47499999403953552</real>
 									<real>388</real>
 									<integer>0</integer>
 									<integer>2</integer>
@@ -388,7 +390,7 @@
 								<string>Position</string>
 								<key>value</key>
 								<array>
-									<real>0.60833334922790527</real>
+									<real>0.52499997615814209</real>
 									<real>0.84375</real>
 									<integer>3</integer>
 									<integer>2</integer>
@@ -485,7 +487,7 @@
 								<string>Position</string>
 								<key>value</key>
 								<array>
-									<real>0.68166667222976685</real>
+									<real>0.52499997615814209</real>
 									<real>388</real>
 									<integer>3</integer>
 									<integer>2</integer>
@@ -2665,8 +2667,6 @@ Theme!</string>
 								</array>
 							</dict>
 						</array>
-						<key>selected</key>
-						<true/>
 					</dict>
 				</array>
 				<key>customClass</key>
