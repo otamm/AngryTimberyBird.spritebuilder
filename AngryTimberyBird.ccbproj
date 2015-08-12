@@ -162,7 +162,14 @@
 			<key>tabletScale</key>
 			<integer>1</integer>
 		</dict>
-		<key>iPad/birds/Red</key>
+		<key>iPad/birds/DarkForest</key>
+		<dict>
+			<key>isDirty</key>
+			<true/>
+			<key>isSmartSpriteSheet</key>
+			<true/>
+		</dict>
+		<key>iPad/birds/Realness</key>
 		<dict>
 			<key>isSmartSpriteSheet</key>
 			<true/>
@@ -172,7 +179,12 @@
 			<key>isSmartSpriteSheet</key>
 			<true/>
 		</dict>
-		<key>iPad/pigs/green</key>
+		<key>iPad/pigs/DarkForest</key>
+		<dict>
+			<key>isSmartSpriteSheet</key>
+			<true/>
+		</dict>
+		<key>iPad/pigs/Realness</key>
 		<dict>
 			<key>isSmartSpriteSheet</key>
 			<true/>
@@ -182,7 +194,17 @@
 			<key>isSmartSpriteSheet</key>
 			<true/>
 		</dict>
+		<key>iPad/themeDisplay</key>
+		<dict>
+			<key>isSmartSpriteSheet</key>
+			<true/>
+		</dict>
 		<key>iPad/worlds/DarkForest</key>
+		<dict>
+			<key>isSmartSpriteSheet</key>
+			<true/>
+		</dict>
+		<key>iPad/worlds/Realness</key>
 		<dict>
 			<key>isSmartSpriteSheet</key>
 			<true/>

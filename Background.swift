@@ -25,4 +25,8 @@ class Background:CCNode {
         self.backgroundWidth = self.backgroundSprite.contentSize.width;
         self.sensorDistanceFromFrame = self.contentSize.width - self.backgroundWidth;*/
     }
+    
+    func setSprite(sprite: String) {
+        self.backgroundSprite.spriteFrame = CCSpriteFrame(imageNamed: "iPad/worlds/" + sprite + "/background4.png");
+    }
 }

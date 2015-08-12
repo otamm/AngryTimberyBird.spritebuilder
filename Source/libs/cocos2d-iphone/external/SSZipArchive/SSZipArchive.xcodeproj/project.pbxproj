@@ -16,7 +16,6 @@
 		21CC41AB17DB7D1300201DDC /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21CC41AA17DB7D1300201DDC /* CoreGraphics.framework */; };
 		21CC41AD17DB7D1300201DDC /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 21CC41AC17DB7D1300201DDC /* UIKit.framework */; };
 		21CC41EC17DB7D2F00201DDC /* SSZipArchive.m in Sources */ = {isa = PBXBuildFile; fileRef = 21CC41E317DB7D2F00201DDC /* SSZipArchive.m */; };
-		21CC420F17DB7D6F00201DDC /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 21CC420817DB7D6300201DDC /* Images.xcassets */; };
 		21CC421017DB7D7400201DDC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 21CC420517DB7D6300201DDC /* main.m */; };
 		21CC421117DB7D7900201DDC /* SSAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 21CC420317DB7D6300201DDC /* SSAppDelegate.m */; };
 		21CC421317DB7E0500201DDC /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 21CC421217DB7E0500201DDC /* libz.dylib */; };
@@ -66,6 +65,7 @@
 		83409E4619D5B85E004B7EB9 /* mztools.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 210D524F17DEFB880060D41A /* mztools.h */; };
 		83409E4719D5B85F004B7EB9 /* unzip.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 210D525117DEFB880060D41A /* unzip.h */; };
 		83409E4819D5B85F004B7EB9 /* zip.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 210D525317DEFB880060D41A /* zip.h */; };
+		AA93EF881B7AA976004FC6E6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA93EF871B7AA976004FC6E6 /* Images.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -129,7 +129,6 @@
 		21CC420317DB7D6300201DDC /* SSAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SSAppDelegate.m; sourceTree = "<group>"; };
 		21CC420517DB7D6300201DDC /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		21CC420617DB7D6300201DDC /* SSZipArchive-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SSZipArchive-Prefix.pch"; sourceTree = "<group>"; };
-		21CC420817DB7D6300201DDC /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		21CC420917DB7D6300201DDC /* SSZipArchive-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "SSZipArchive-Info.plist"; sourceTree = "<group>"; };
 		21CC421217DB7E0500201DDC /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		7A4036B419DE3D89007B6E8F /* SSZipArchiveExampleAppAndroid-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "SSZipArchiveExampleAppAndroid-Info.plist"; path = "/Users/jackson/git/SpriteBuilder/SpriteBuilder/libs/cocos2d-iphone/external/SSZipArchive/SSZipArchiveExampleAppAndroid-Info.plist"; sourceTree = "<absolute>"; };
@@ -138,6 +137,7 @@
 		7A59497419E38C2D00F65F90 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/usr/lib/libz.dylib; sourceTree = DEVELOPER_DIR; };
 		7A59497619E38C3100F65F90 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		83409DCE19D5B65B004B7EB9 /* libSSZipArchive.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSSZipArchive.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA93EF871B7AA976004FC6E6 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = SSZipArchiveExampleApp/Images.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -198,6 +198,7 @@
 		21CC419C17DB7D1300201DDC = {
 			isa = PBXGroup;
 			children = (
+				AA93EF871B7AA976004FC6E6 /* Images.xcassets */,
 				21CC41D717DB7D2F00201DDC /* SSZipArchive */,
 				21CC420017DB7D6300201DDC /* Example */,
 				21CC41EE17DB7D3500201DDC /* Tests */,
@@ -297,7 +298,6 @@
 		21CC420717DB7D6300201DDC /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				21CC420817DB7D6300201DDC /* Images.xcassets */,
 				21CC420917DB7D6300201DDC /* SSZipArchive-Info.plist */,
 			);
 			path = Resources;
@@ -458,8 +458,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				21CC420F17DB7D6F00201DDC /* Images.xcassets in Resources */,
 				011F4B96182D71B700DE704F /* RelativeSymbolicLink.zip in Resources */,
+				AA93EF881B7AA976004FC6E6 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

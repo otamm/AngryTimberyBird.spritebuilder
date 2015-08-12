@@ -29,6 +29,10 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     weak var addedPointsLabel2:CCLabelBMFont!;
     // just a label with the text 'score'. Invisible once game is over.
     weak var scoreText:CCLabelBMFont!;
+    // starts game.
+    weak var playButton:CCButton!;
+    // presents theme selection scene.
+    weak var themeButton:CCButton!;
     
     /* custom variables */
     
@@ -51,9 +55,9 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     // array to hold current Obstacle instances.
     var obstacles:[Obstacle] = [];
     // specifies location of first obstacle.
-    let firstObstaclePosition:CGFloat = 380;
+    let firstObstaclePosition:CGFloat = 450;
     // specifies distance between each obstacle.
-    let distanceBetweenObstacles:CGFloat = 280; // should be either a multiple or divisor of 256 to avoid a bug.
+    let distanceBetweenObstacles:CGFloat = 288; // should be either a multiple or divisor of 256 to avoid a bug.
     // specifies horizontal position of past obstacle.
     var nextObstaclePosition:CGFloat!;
     // specifies index of active obstacle.
@@ -100,31 +104,76 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     var lastPigPosition:CGFloat!;
     // stores number for added points label
     var addedPointsNum:Int = 0;
+    // represents directory for current theme.
+    var theme:String!;
+    // array with themes available.
+    var themes:[String] = ["DarkForest", "Realness"];
+    // current theme index, set to 0 by default.
+    var themeIndex:Int = 0;
+    // checks wheter or not game started.
+    var gameStarted:Bool = false;
+    // initial gravity value. set after loading game.
+    var gravity:Float!;
+    // flight value, upwards Y velocity
+    var flight:Float!;
+    // compensate the variety of densities for each bird.
+    var flightImpulse:CGFloat!;
+    // store values for each respective theme.
+    var themeImpulses:[CGFloat] = [1000, 1800];
+    var themeGravities:[Float] = [-200, -250];
+    var themeFlights:[Float] = [210, 250];
+    // checks whether to play initial animations or not. Set to false by default
+    var playAnimations = false;
     
     /* cocos2d methods */
     
     // called once scene is loaded
     func didLoadFromCCB() {
         self.nextObstaclePosition = self.firstObstaclePosition;
+        self.loadTheme();
+        
+        //self.themeIndex = 1;
+        var chosenTheme = self.themes[self.themeIndex];
+        //var chosenTheme = self.themes[0];
+        self.bird = CCBReader.load("Themes/" + chosenTheme + "/Bird" + "\(self.themeIndex)") as! Bird;
+        self.gamePhysicsNode.addChild(self.bird);
+        self.setupPositions();
+        // bird added to physics node once game starts.
+        //self.gamePhysicsNode.addChild(self.bird);
+        
+        self.backgroundLayer.zOrder = 0;
+        self.obstaclesLayer.zOrder = 1;
+        self.groundBlocksLayer.zOrder = 2;
+        self.bird.zOrder = 3;
+        self.addedPointsLabel1.zOrder = 4;
+        self.addedPointsLabel2.zOrder = 5;
+        self.scoreText.zOrder = 6;
+        self.scoreLabel.zOrder = 7;
         
         var background:Background;
         var obstacle:Obstacle;
         var groundBlock:Ground;
         
+        self.backgroundLayer.position = CGPoint(x: 0, y: 0);
+        
         for i in 0..<4 {
-            // add backgrounds and position them
+            // add backgrounds and position them spriteFrame = CCSpriteFrame(imageNamed:)
             background = CCBReader.load("Background") as! Background;
+            background.setSprite(chosenTheme);
             self.backgroundLayer.addChild(background);
             self.backgrounds.append(background);
             self.backgrounds[i].position = CGPoint(x: background.contentSize.width * CGFloat(i) - 4, y: 0);
             
             // add obstacles, which will be spawned later.
             obstacle = CCBReader.load("Obstacle") as! Obstacle;
+            //obstacle.zOrder = -10;
+            obstacle.setSprite(chosenTheme);
             self.obstacles.append(obstacle);
             self.obstaclesLayer.addChild(obstacle);
             
             // add ground blocks and positions them.
             groundBlock = CCBReader.load("Ground") as! Ground;
+            groundBlock.spriteFrame = CCSpriteFrame(imageNamed: "iPad/worlds/" + chosenTheme + "/ground4.png");
             self.groundBlocks.append(groundBlock);
             self.groundBlocksLayer.addChild(self.groundBlocks[i]);
             self.groundBlocks[i].position = CGPoint(x: groundBlock.contentSize.width * CGFloat(i) - 4, y: 0);
@@ -146,24 +195,24 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         var randomY:CGFloat;
         
         for i in 0..<4 {
-            pig = CCBReader.load("Pig") as! Pig;
+            pig = CCBReader.load("Themes/" + chosenTheme + "/Pig" + "\(self.themeIndex)") as! Pig;
             pig.index = i;
             self.pigs.append(pig);
             //self.pigsLayer.addChild(pig);
             self.obstaclesLayer.addChild(pig);
             randomY = (CGFloat(CCRANDOM_0_1()) * self.usableScreenHeight) + 2 * self.groundHeight;
-            randomX = ((self.distanceBetweenObstacles - self.obstacleWidth) / 4) * CGFloat(CCRANDOM_0_1());
+            randomX = round((self.distanceBetweenObstacles - 2 * self.obstacleWidth) / 4);
             
             if (CCRANDOM_0_1() > 0.5) {
                 randomX = -randomX;
             }
-            
+
             self.pigs[i].distanceFromCenter = randomX;
-            //random = (CGFloat(arc4random_uniform(UInt32(self.usableScreenSize)))) + self.groundHeight;
-            pig.position = CGPoint(x: ((self.distanceBetweenObstacles - self.obstacleWidth) / 2) + self.nextObstaclePosition + (CGFloat(i) * self.distanceBetweenObstacles) + randomX, y: randomY);
+            
+            pig.position = CGPoint(x: ((self.distanceBetweenObstacles - 2 * self.obstacleWidth) / 2) + self.nextObstaclePosition + (CGFloat(i) * self.distanceBetweenObstacles) + randomX + self.obstacleWidth, y: randomY);
         }
         self.lastPigPosition = self.pigs[self.pigs.count - 1].position.x;
-        
+
         
         self.minusPigWidth = -(self.pigs[0].contentSize.width);
         
@@ -180,33 +229,72 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         //self.gamePhysicsNode.debugDraw = true;
     }
     
+    // executed just after didLoadFromCCB.
+    override func onEnter() {
+        super.onEnter();
+        // loads ads and displays them at the top on first load; from second load on, displays them at the top.
+        if (self.isFirstLoad) {
+            //self.loadAds();
+            iAdHandler.sharedInstance.loadAds(bannerPosition: .Top);
+            //iAdHandler.sharedInstance.adBannerView.hidden = false;
+            iAdHandler.sharedInstance.displayBannerAd();
+            iAdHandler.sharedInstance.loadInterstitialAd();
+            self.playAnimations = true;
+        } else {
+            iAdHandler.sharedInstance.setBannerPosition(bannerPosition: .Bottom);
+            iAdHandler.sharedInstance.displayBannerAd();
+        }
+        
+        if (self.isFirstLoad || self.playAnimations) {
+            self.playButton.visible = true;
+            self.themeButton.visible = true;
+            self.playButton.userInteractionEnabled = true;
+            self.themeButton.userInteractionEnabled = true;
+            self.scoreText.visible = false;
+            self.scoreLabel.visible = false;
+            
+            self.isGameOver = true;
+            
+            self.flight = 300;
+            self.gravity = -200;
+            animationManager.runAnimationsForSequenceNamed("logoEnter");
+        } else {
+            //iAdHandler.sharedInstance.loadAds(bannerPosition: .Bottom);
+            //iAdHandler.sharedInstance.adBannerView.hidden = false;
+            self.gameStarted = true;
+            self.isGameOver = false;
+        }
+    }
+    
     // called at every rendered frame
     override func update(delta: CCTime) {
         // clampf tests the specific float value and if it is bigger than a set maximum, the value gets assigned to that maximum (which is 200 in this case). First argument is value to test, second argument is minimum value allowed and third argument is the maximum value allowed.
         // setting the second argument (the minimum) to -Float(CGFloat.max) would assign minimum value as the smallest float possible, which means that the downwards velocity will not get affected.
+        if (self.gameStarted) {
+            /*let velocityY = clampf(Float(self.bird.physicsBody.velocity.y), self.gravity, self.flight);
+            self.bird.physicsBody.velocity = ccp(0, CGFloat(velocityY));*/
+            // moves bird horizontally on screen.
+            let velocityY = clampf(Float(self.bird.physicsBody.velocity.y), self.gravity, self.flight);
+            self.bird.physicsBody.velocity = ccp(0, CGFloat(velocityY))
+            self.bird.position.x += self.birdSpeedX * CGFloat(delta);
         
-        let velocityY = clampf(Float(self.bird.physicsBody.velocity.y), -200, 300);
-        self.bird.physicsBody.velocity = ccp(0, CGFloat(velocityY));
+            // moves physics node to the left, which repositions every child of it (bird horizontal position is cancelled out)
+            self.gamePhysicsNode.position.x -= self.birdSpeedX * CGFloat(delta);
         
-        // moves bird horizontally on screen.
-        self.bird.position.x += self.birdSpeedX * CGFloat(delta);
+            //self.sinceTouch += delta; // updates timer
+            /*self.bird.rotation = clampf(self.bird.rotation, -30, 90); // updates rotation, value is clamped to    not let bird spin around itself.
         
-        // moves physics node to the left, which repositions every child of it (bird horizontal position is cancelled out)
-        self.gamePhysicsNode.position.x -= self.birdSpeedX * CGFloat(delta);
-        
-        //self.sinceTouch += delta; // updates timer
-        /*self.bird.rotation = clampf(self.bird.rotation, -30, 90); // updates rotation, value is clamped to not let bird spin around itself.
-        
-        // will update bird's angular velocity if the value is not at a minimum or maximum.
-        if (self.bird.physicsBody.allowsRotation) {
-            let angularVelocity = clampf(Float(self.bird.physicsBody.angularVelocity), -2, 1);
-            self.bird.physicsBody.angularVelocity = CGFloat(angularVelocity);
+            // will update bird's angular velocity if the value is not at a minimum or maximum.
+            if (self.bird.physicsBody.allowsRotation) {
+                let angularVelocity = clampf(Float(self.bird.physicsBody.angularVelocity), -2, 1);
+                self.bird.physicsBody.angularVelocity = CGFloat(angularVelocity);
+            }
+            // will start rotating the bird down after a while.
+            if (self.sinceTouch > 0.3) {
+                let impulse = -18000.0 * delta;
+                self.bird.physicsBody.applyAngularImpulse(CGFloat(impulse));
+            }*/
         }
-        // will start rotating the bird down after a while.
-        if (self.sinceTouch > 0.3) {
-            let impulse = -18000.0 * delta;
-            self.bird.physicsBody.applyAngularImpulse(CGFloat(impulse));
-        }*/
         
         if (self.somethingNeedsRepositioning) {
             
@@ -235,12 +323,6 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             }
             self.somethingNeedsRepositioning = false;
         }
-        
-        /*if (self.convertToNodeSpace(self.obstaclesLayer.convertToWorldSpace(self.pigs[self.offscreenPigIndex].position)).x <= self.minusPigWidth) {
-            
-            self.spawnNewPig();
-            
-        }*/
     }
     
     // listens for collision between bird and any 'level' object.
@@ -307,23 +389,46 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     
     /* button methods */
     
-    func restart() {
-        let scene = CCBReader.loadAsScene("MainScene");
-        CCDirector.sharedDirector().presentScene(scene);
+    func startGame() {
+        iAdHandler.sharedInstance.adBannerView.hidden = true;
+        
+        var mainScene = CCBReader.load("MainScene") as! MainScene;
+        mainScene.isFirstLoad = false;
+        mainScene.gameStarted = true;
+        mainScene.isGameOver = false;
+        //mainScene.gameStarted = true;
+        var scene = CCScene();
+        scene.addChild(mainScene);
+        var transition = CCTransition(fadeWithDuration: 0.3);
+        CCDirector.sharedDirector().presentScene(scene, withTransition: transition);
+    }
+    
+    func chooseTheme() {
+        var chooseThemePopover = CCBReader.load("ChooseTheme") as! ChooseTheme;
+        chooseThemePopover.positionType = CCPositionType(xUnit: .Normalized, yUnit: .Normalized, corner: .BottomLeft);
+        chooseThemePopover.availableThemes = self.themes;
+        chooseThemePopover.position = ccp(0.5, 0.5);
+        chooseThemePopover.zOrder = Int.max;
+        chooseThemePopover.setCurrentTheme(self.themeIndex);
+        self.addChild(chooseThemePopover);
     }
     
     /* iOS methods */
     
     override func touchBegan(touch: CCTouch!, withEvent event: CCTouchEvent!) {
-        if !(self.isGameOver) {
+        if (self.gameStarted) {
             // makes bird go up
-            self.bird.physicsBody.applyImpulse(ccp(0, 300));
+            self.bird.physicsBody.applyImpulse(ccp(0, 10000));
             // makes bird rotate up
             //self.bird.physicsBody.applyAngularImpulse(10000);
             // resets timer
+            let velocityY = clampf(Float(self.bird.physicsBody.velocity.y), self.gravity, self.flight);
+            self.bird.physicsBody.velocity = ccp(0, CGFloat(velocityY));
             self.sinceTouch = 0;
         } else {
-            self.displayGameOver();
+            if !(self.isFirstLoad || self.playAnimations) {
+                self.displayGameOver();
+            }
         }
     }
     
@@ -333,6 +438,9 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     func spawnNewBackground() {
         //self.backgrounds[self.backgroundIndex].position.x = self.backgrounds[self.backgroundIndex].position.x + CGFloat(self.backgrounds.count) * (self.backgrounds[self.backgroundIndex].backgroundWidth); // will actually add two times its own width to its X position.
         self.backgrounds[self.backgroundIndex].position.x += CGFloat(self.backgrounds.count) * -(self.minusBackgroundWidth);
+        
+        self.backgrounds[self.backgroundIndex].position = ccp(round(self.backgrounds[self.backgroundIndex].position.x), round(self.backgrounds[self.backgroundIndex].position.y));
+        
         self.backgroundIndex = (self.backgroundIndex + 1) % self.backgrounds.count;
     }
     
@@ -348,6 +456,9 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     // interchanges ground rendering
     func spawnNewGroundBlock() {
         self.groundBlocks[self.groundBlockIndex].position.x += self.groundWidth * CGFloat(self.groundBlocks.count);
+        
+        self.groundBlocks[self.groundBlockIndex].position = ccp(round(self.groundBlocks[self.groundBlockIndex].position.x), round(self.groundBlocks[self.groundBlockIndex].position.y));
+        
         self.groundBlockIndex = (self.groundBlockIndex + 1) % self.groundBlocks.count;
         
     }
@@ -355,17 +466,18 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     // spawns pig at new location
     func spawnNewPig() {
         let randomY:CGFloat = (CGFloat(CCRANDOM_0_1()) * self.usableScreenHeight) + 2 * self.groundHeight;
-        var randomX:CGFloat = (CGFloat(CCRANDOM_0_1()) * (self.distanceBetweenObstacles - self.obstacleWidth)) / 4;
-    
+        var randomX:CGFloat = round(CGFloat(self.distanceBetweenObstacles - 2 * self.obstacleWidth) / 4);
+        
+        var pigDistanceFromCenter:CGFloat = self.pigs[self.offscreenPigIndex].distanceFromCenter;
         if (CCRANDOM_0_1() > 0.5) {
             randomX = -randomX;
         }
         
         self.pigs[self.offscreenPigIndex].distanceFromCenter = randomX;
-        
+
         // assigns random position to pig. X axis is half the distance between obstacles plus or minus up to one third the distance between obstacles. Y axis is a random position between the ground and the full screen height.
         //self.pigs[self.offscreenPigIndex].position = CGPoint(x: self.lastPigPosition - self.pigs[(self.offscreenPigIndex + self.pigs.count - 1) % self.pigs.count].distanceFromCenter + (self.obstacleWidth + self.distanceBetweenObstacles / 2), y: randomY);
-        self.pigs[self.offscreenPigIndex].position = CGPoint(x: self.lastPigPosition - self.pigs[(self.offscreenPigIndex + self.pigs.count - 1) % self.pigs.count].distanceFromCenter + self.distanceBetweenObstacles, y: randomY);
+        self.pigs[self.offscreenPigIndex].position = CGPoint(x: self.lastPigPosition - pigDistanceFromCenter + self.distanceBetweenObstacles + randomX, y: randomY);
         
         if (self.pigs[self.offscreenPigIndex].isPopped) {
             self.pigs[self.offscreenPigIndex].revive();
@@ -381,6 +493,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     }
     
     func triggerGameOver() {
+        //self.unschedule("gameplay");
         self.bird.die();
         self.birdSpeedX = 0;
         self.bird.rotation = 90;
@@ -390,9 +503,11 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         for p in 0..<self.pigs.count {
             self.pigs[p].physicsBody.collisionMask = [];
         }
-        
-        self.isGameOver = true;
-        self.schedule("displayGameOver", interval: 70.0 / 60.0);
+        if !(self.isFirstLoad || self.playAnimations) {
+            self.isGameOver = true;
+            self.gameStarted = false;
+            self.schedule("displayGameOver", interval: 70.0 / 60.0);
+        }
         
         // just in case
         self.bird.stopAllActions();
@@ -442,7 +557,29 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
         gameEndPopover.positionType = CCPositionType(xUnit: .Normalized, yUnit: .Normalized, corner: .BottomLeft);
         gameEndPopover.position = ccp(0.5, 0.5);
         gameEndPopover.zOrder = Int.max;
+        gameEndPopover.themeIndex = self.themeIndex;
+        gameEndPopover.availableThemes = self.themes;
         gameEndPopover.isHighscore(self.score);
         self.addChild(gameEndPopover);
     }
+    
+    func loadTheme() {
+        let defaults = NSUserDefaults.standardUserDefaults();
+        var chosenIndex:Int? = defaults.integerForKey("themeIndex");
+        var defaultIndex = 0;
+        if (chosenIndex != nil) {
+            self.themeIndex = chosenIndex!;
+        } else {
+            self.themeIndex = defaultIndex;
+        }
+        
+        self.gravity = self.themeGravities[self.themeIndex];
+        self.flight = self.themeFlights[self.themeIndex];
+        self.flightImpulse = self.themeImpulses[self.themeIndex];
+    }
+    
+    func setupPositions() {
+        self.bird.position = CGPoint(x: CCDirector.sharedDirector().viewSize().width * 0.34, y: CCDirector.sharedDirector().viewSize().height * 0.7);
+    }
+    
 }

@@ -88,16 +88,16 @@
 							<key>points</key>
 							<array>
 								<array>
-									<real>-0.72890472412109375</real>
-									<real>534.1640625</real>
+									<real>2.1695327758789062</real>
+									<real>532.79296875</real>
 								</array>
 								<array>
-									<real>-17.314842224121094</real>
-									<real>533.25</real>
+									<real>-1.7601547241210938</real>
+									<real>532.79296875</real>
 								</array>
 								<array>
-									<real>-16.525779724121094</real>
-									<real>6.62890625</real>
+									<real>-2.9085922241210938</real>
+									<real>6.0703125</real>
 								</array>
 								<array>
 									<real>0.40781402587890625</real>
@@ -108,16 +108,16 @@
 							<array>
 								<array>
 									<array>
-										<real>-0.72890472412109375</real>
-										<real>534.1640625</real>
+										<real>2.1695327758789062</real>
+										<real>532.79296875</real>
 									</array>
 									<array>
-										<real>-17.314842224121094</real>
-										<real>533.25</real>
+										<real>-1.7601547241210938</real>
+										<real>532.79296875</real>
 									</array>
 									<array>
-										<real>-16.525779724121094</real>
-										<real>6.62890625</real>
+										<real>-2.9085922241210938</real>
+										<real>6.0703125</real>
 									</array>
 									<array>
 										<real>0.40781402587890625</real>
@@ -188,6 +188,8 @@
 								</array>
 							</dict>
 						</array>
+						<key>selected</key>
+						<true/>
 					</dict>
 				</array>
 				<key>customClass</key>
@@ -355,8 +357,6 @@
 						<array/>
 					</dict>
 				</array>
-				<key>selected</key>
-				<true/>
 			</dict>
 			<dict>
 				<key>UUID</key>

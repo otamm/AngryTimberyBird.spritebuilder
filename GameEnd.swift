@@ -7,7 +7,6 @@
 //
 
 import Foundation;
-import Social;
 import GameKit;
 
 class GameEnd:CCNode, GKGameCenterControllerDelegate {
@@ -18,6 +17,7 @@ class GameEnd:CCNode, GKGameCenterControllerDelegate {
     weak var twitterButton:CCButton!;
     weak var facebookButton:CCButton!;
     weak var gameCenterButton:CCButton!;
+    weak var themeButton:CCButton!;
     
     weak var totalScore:CCLabelBMFont!;
     weak var highScore:CCLabelBMFont!;
@@ -28,10 +28,19 @@ class GameEnd:CCNode, GKGameCenterControllerDelegate {
     var currentScore:Int = 0;
     var currentBest:Int = 0;
     
+    
+    // loads current theme index and available themes to pass them to ChooseTheme class.
+    var availableThemes:[String] = [];
+    var themeIndex:Int!;
+    
     /* cocos2d methods */
     
     func didLoadFromCCB() {
         //self.setUpGameCenter();
+        //self.loadAds();
+        iAdHandler.sharedInstance.setBannerPosition(bannerPosition: .Top);
+        iAdHandler.sharedInstance.adBannerView.hidden = false;
+        iAdHandler.sharedInstance.displayBannerAd();
     }
     
     
@@ -66,37 +75,15 @@ class GameEnd:CCNode, GKGameCenterControllerDelegate {
         gameCenterInteractor.authenticationCheck();
     }
     
-    func shareButtonTapped() {
-        var scene = CCDirector.sharedDirector().runningScene;
-        var node: AnyObject = scene.children[0];
-        var screenshot = screenShotWithStartNode(node as! CCNode);
-        
-        let sharedText = "This is some default text that I want to share with my users. [This is where I put a link to download my awesome game]";
-        let itemsToShare = [screenshot, sharedText];
-        
-        var excludedActivities = [ UIActivityTypeAssignToContact,
-            UIActivityTypeAddToReadingList, UIActivityTypePostToTencentWeibo];
-        
-        var controller = UIActivityViewController(activityItems: itemsToShare, applicationActivities: nil);
-        controller.excludedActivityTypes = excludedActivities;
-        UIApplication.sharedApplication().keyWindow?.rootViewController?.presentViewController(controller, animated: true, completion: nil);
-        
-    }
-    
-    func screenShotWithStartNode(node: CCNode) -> UIImage {
-        CCDirector.sharedDirector().nextDeltaTimeZero = true;
-        var viewSize = CCDirector.sharedDirector().viewSize();
-        var rtx = CCRenderTexture(width: Int32(viewSize.width), height: Int32(viewSize.height));
-        rtx.begin();
-        node.visit();
-        rtx.end();
-        return rtx.getUIImage();
-    }
-    
     /* button methods */
     func restart() {
+        // hides ads just before restarting.
+
+        iAdHandler.sharedInstance.adBannerView.hidden = true;
+        
         var mainScene = CCBReader.load("MainScene") as! MainScene;
         mainScene.isFirstLoad = false;
+        //mainScene.playAnimations = true;
         var scene = CCScene();
         scene.addChild(mainScene);
         var transition = CCTransition(fadeWithDuration: 0.3);
@@ -117,6 +104,16 @@ class GameEnd:CCNode, GKGameCenterControllerDelegate {
         SharingHandler.sharedInstance.postToTwitter(stringToPost: "HELLO DERR", postWithScreenshot: true);
     }
     
+    func chooseTheme() {
+        var chooseThemePopover = CCBReader.load("ChooseTheme") as! ChooseTheme;
+        chooseThemePopover.positionType = CCPositionType(xUnit: .Normalized, yUnit: .Normalized, corner: .BottomLeft);
+        chooseThemePopover.availableThemes = self.availableThemes;
+        chooseThemePopover.position = ccp(0.5, 0.5);
+        chooseThemePopover.zOrder = Int.max;
+        chooseThemePopover.setCurrentTheme(self.themeIndex);
+        self.addChild(chooseThemePopover);
+    }
+    
     /* GameKit methods */
     
     func showLeaderboard() {
@@ -132,7 +129,7 @@ class GameEnd:CCNode, GKGameCenterControllerDelegate {
     }
     
     func reportHighScoreToGameCenter() {
-        var scoreReporter = GKScore(leaderboardIdentifier: "CrossItWayWalk");
+        var scoreReporter = GKScore(leaderboardIdentifier: "LumbyBird");
         scoreReporter.value = Int64(self.currentBest);// = Int64(GameCenterInteractor.sharedInstance.score);
         var scoreArray: [GKScore] = [scoreReporter];
         
