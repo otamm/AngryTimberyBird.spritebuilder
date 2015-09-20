@@ -532,7 +532,6 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             self.addedPointsLabel2.runAction(CCActionMoveBy(duration: 20.0/60.0, position: CGPoint(x: 0, y: 100)));
         }
         self.schedule("undisplayAddedPoints", interval: 20.0 / 60.0);
-        //self.undisplayAddedPoints();
     }
     
     func undisplayAddedPoints() {
