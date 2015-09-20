@@ -365,19 +365,21 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     
     // listens for collision between bird and any 'level' object.
     func ccPhysicsCollisionBegin(pair: CCPhysicsCollisionPair!, bird: CCNode!, pig: Pig!) -> ObjCBool {
-        self.pigs[pig.index].die();
-        if (self.lastPoppedPig != (pig.index + self.pigs.count - 1) % self.pigs.count) {
-            self.scoreMultiplier = 0;
-        }
-        self.lastPoppedPig = pig.index;
-        self.scoreMultiplier++;
+        if (!pig.isPopped) {
+            self.pigs[pig.index].die();
+            if (self.lastPoppedPig != (pig.index + self.pigs.count - 1) % self.pigs.count) {
+                self.scoreMultiplier = 0;
+            }
+            self.lastPoppedPig = pig.index;
+            self.scoreMultiplier++;
         
-        let addToScore = 50 * self.scoreMultiplier;
-        self.displayAddedPoints(addToScore);
-        self.score = self.score + (addToScore);
-        self.scoreLabel.setString("\(self.score)");
+            let addToScore = 50 * self.scoreMultiplier;
+            self.displayAddedPoints(addToScore);
+            self.score = self.score + (addToScore);
+            self.scoreLabel.setString("\(self.score)");
         
         //println("\(self.score)");
+        }
         return true;
     }
     

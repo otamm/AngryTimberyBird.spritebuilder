@@ -22,12 +22,17 @@ class Pig:CCSprite {
     
     func die() {
         self.isPopped = true;
-        self.runAction(CCActionMoveBy(duration: 0.2, position: CGPoint(x: 0, y: 500)));
+        self.runAction(CCActionMoveBy(duration: 0.2, position: CGPoint(x: 0, y: 50)));
         animationManager.runAnimationsForSequenceNamed("Die");
+    }
+    
+    func vanish() {
+        self.visible = false;
     }
     
     func revive() {
         self.isPopped = false;
+        self.visible = true;
         animationManager.runAnimationsForSequenceNamed("FlapWings");
     }
 }
