@@ -107,7 +107,7 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     // represents directory for current theme.
     var theme:String!;
     // array with themes available.
-    var themes:[String] = ["DarkForest", "Realness"];
+    var themes:[String] = ["DarkForest", "Realness", "Aqua"];
     // current theme index, set to 0 by default.
     var themeIndex:Int = 0;
     // checks wheter or not game started.
@@ -119,9 +119,9 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     // compensate the variety of densities for each bird.
     var flightImpulse:CGFloat!;
     // store values for each respective theme.
-    var themeImpulses:[CGFloat] = [1000, 1800];
-    var themeGravities:[Float] = [-200, -250];
-    var themeFlights:[Float] = [210, 250];
+    var themeImpulses:[CGFloat] = [1000, 1800, 1000];
+    var themeGravities:[Float] = [-200, -250, -200];
+    var themeFlights:[Float] = [210, 250, 210];
     // checks whether to play initial animations or not. Set to false by default
     var playAnimations = false;
     
