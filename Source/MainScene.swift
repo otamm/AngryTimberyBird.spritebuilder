@@ -122,6 +122,10 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     var themeImpulses:[CGFloat] = [1000, 1800, 1000];
     var themeGravities:[Float] = [-200, -250, -200];
     var themeFlights:[Float] = [210, 250, 210];
+    let xSpeedIncrement:CGFloat = 0.2;
+    var xSpeedIncremented:CGFloat = 0;
+    let ySpeedIncrement:Float = 0.15;
+    
     // checks whether to play initial animations or not. Set to false by default
     var playAnimations = false;
     
@@ -275,11 +279,12 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
             self.bird.physicsBody.velocity = ccp(0, CGFloat(velocityY));*/
             // moves bird horizontally on screen.
             let velocityY = clampf(Float(self.bird.physicsBody.velocity.y), self.gravity, self.flight);
-            self.bird.physicsBody.velocity = ccp(0, CGFloat(velocityY))
-            self.bird.position.x += self.birdSpeedX * CGFloat(delta);
+            self.bird.physicsBody.velocity = ccp(0, CGFloat(velocityY));
+            // increments bird speed with xSpeedIncrement
+            self.bird.position.x += self.birdSpeedX * CGFloat(delta) + self.xSpeedIncremented;
         
             // moves physics node to the left, which repositions every child of it (bird horizontal position is cancelled out)
-            self.gamePhysicsNode.position.x -= self.birdSpeedX * CGFloat(delta);
+            self.gamePhysicsNode.position.x -= self.birdSpeedX * CGFloat(delta) + self.xSpeedIncremented;
         
             //self.sinceTouch += delta; // updates timer
             /*self.bird.rotation = clampf(self.bird.rotation, -30, 90); // updates rotation, value is clamped to    not let bird spin around itself.
@@ -333,9 +338,10 @@ class MainScene: CCNode, CCPhysicsCollisionDelegate {
     
     // listens for collisions between bird and goal, located between two pipes. A lot of checks will be ran here to save processing power from doing all of them on the update method, which would execute at every new frame rendered.
     func ccPhysicsCollisionBegin(pair: CCPhysicsCollisionPair!, bird: CCNode!, goal: Goal!) -> ObjCBool {
-        
         self.score += 100;
-        
+        self.xSpeedIncremented = self.xSpeedIncremented + self.xSpeedIncrement;
+        self.flight = self.flight + self.ySpeedIncrement;
+        self.gravity = self.gravity - self.ySpeedIncrement;
         self.scoreLabel.setString("\(self.score)");
         self.displayAddedPoints(100);
         
