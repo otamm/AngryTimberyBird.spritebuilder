@@ -27,16 +27,12 @@
 
 #import "AppDelegate.h"
 #import "CCBuilderReader.h"
-#import "Mixpanel.h"
 
 @implementation AppController
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Configure Cocos2d with the options set in SpriteBuilder
-    [Mixpanel sharedInstanceWithToken:@"5d95f83e9a90b1fced575974fea972ef"];
-    [[Mixpanel sharedInstance] track:@"App launched"];
-    
     NSString* configPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Published-iOS"]; // TODO: add support for Published-Android support
     configPath = [configPath stringByAppendingPathComponent:@"configCocos2d.plist"];
     

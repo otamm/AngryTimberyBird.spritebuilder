@@ -14,7 +14,7 @@ class Pig:CCSprite {
     // checks wheter pig was popped or not.
     var isPopped:Bool = false;
     // stores deviation from standard position.
-    var distanceFromCenter:CGFloat!;
+    //var distanceFromCenter:CGFloat!;
     
     func didLoadFromCCB() {
         self.physicsBody.sensor = true;

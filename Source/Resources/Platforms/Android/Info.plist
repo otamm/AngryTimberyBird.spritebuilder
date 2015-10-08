@@ -5,15 +5,15 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleDisplayName</key>
-	<string>AngryTimberyBird</string>
+	<string>LumbyBird</string>
 	<key>CFBundleExecutable</key>
-	<string>AngryTimberyBird</string>
+	<string>LumbyBird</string>
 	<key>CFBundleIdentifier</key>
-	<string>org.cocos2d.AngryTimberyBird</string>
+	<string>org.cocos2d.LumbyBird</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>AngryTimberyBird</string>
+	<string>LumbyBird</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleSignature</key>

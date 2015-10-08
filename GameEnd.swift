@@ -38,9 +38,9 @@ class GameEnd:CCNode, GKGameCenterControllerDelegate {
     func didLoadFromCCB() {
         //self.setUpGameCenter();
         //self.loadAds();
-        iAdHandler.sharedInstance.setBannerPosition(bannerPosition: .Top);
-        iAdHandler.sharedInstance.adBannerView.hidden = false;
-        iAdHandler.sharedInstance.displayBannerAd();
+        //iAdHandler.sharedInstance.setBannerPosition(bannerPosition: .Top);
+        //iAdHandler.sharedInstance.adBannerView.hidden = false;
+        //iAdHandler.sharedInstance.displayBannerAd();
     }
     
     
@@ -77,9 +77,9 @@ class GameEnd:CCNode, GKGameCenterControllerDelegate {
     
     /* button methods */
     func restart() {
-        // hides ads just before restarting.
+        // hide ads just before restarting.
 
-        iAdHandler.sharedInstance.adBannerView.hidden = true;
+        //iAdHandler.sharedInstance.adBannerView.hidden = true;
         
         var mainScene = CCBReader.load("MainScene") as! MainScene;
         mainScene.isFirstLoad = false;
